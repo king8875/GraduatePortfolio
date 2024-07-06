@@ -1,0 +1,266 @@
+.main_wrapper {
+    border-radius: 20px;
+    background-color: #fff;
+    margin: 0 10px 0 10px;
+}
+
+.test_container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    overflow: hidden;
+    margin-top: 20px;
+    border-radius: 20px;
+}
+
+.slide-container {
+    position: relative;
+    width: 100%;
+}
+
+.slide {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+    width: 300%;
+    /* Number of slides * 100% */
+}
+
+.slide li {
+    list-style: none;
+    width: 100%;
+    flex: 0 0 100%;
+}
+
+.slide img {
+    display: block;
+}
+
+button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+button.prev {
+    left: 10px;
+}
+
+button.next {
+    right: 10px;
+}
+
+.main_profile_con {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+}
+
+.profile_img_con {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+
+    justify-content: center;
+
+    img {
+        width: 100px;
+        height: 100px;
+        border-radius: 999px;
+    }
+}
+
+.profile_username {
+    font-size: 18px;
+    text-align: center;
+}
+
+.profile_item_con {
+    padding: 20px 50px 20px 50px;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 24px;
+    background-color: #eee;
+    border-radius: 20px;
+
+}
+
+.modal_con {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: auto;
+    display: none;
+    background-color: #fff;
+    border: 1px solid black;
+    border-radius: 20px;
+}
+
+.modal_content {
+    width: 1100px;
+    padding: 30px;
+}
+
+.profile_commit_btn_con {
+    display: flex;
+    gap: 10px;
+    justify-content: end;
+
+    div:nth-child(1) {
+        padding: 10px;
+        border-radius: 12px;
+        background-color: #676767;
+        color: #fff;
+    }
+
+    div:nth-child(2) {
+        padding: 10px;
+        border-radius: 12px;
+        background-color: #5429FF;
+        color: #fff;
+    }
+}
+
+.mid_content_wrapper {
+    display: flex;
+    margin: 10px 10px 60px 10px;
+    gap: 20px;
+    height: 350px;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.weekly_contest_con {
+    display: flex;
+    flex-direction: column;
+    height: 350px;
+    justify-content: center;
+    padding: 0 30px 0 30px;
+}
+
+.weekly_dogs_con {
+    height: 250px;
+    display: flex;
+    gap: 10px;
+    border-radius: 20px;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px 0 20px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+}
+
+
+
+.weekly_contest_title {
+    font-size: 24px;
+    font-weight: 500;
+    padding: 10px 0 10px 0;
+}
+
+
+
+.contest_box {
+    width: 200px;
+    height: 200px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    background-color: #ffd4d4;
+    border-radius: 20px;
+
+}
+
+.box_content {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.img_content {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+
+}
+
+.background_cover {
+    background-size: cover;
+    background-position: center;
+}
+
+.author_name_con {
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    opacity: 0.3;
+    visibility: hidden;
+    border-radius: 20px;
+    text-align: center;
+    justify-content: end;
+    color: white;
+}
+
+.news_wrapper {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.news_title {
+    font-weight: 500;
+    font-size: 24px;
+    margin-left: 20px;
+}
+
+.news_item {
+    width: 300px;
+    height: 350px;
+    background-color: #eee;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+}
+
+.news_item_img_con {
+    width: 300px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+
+
+    img {
+        max-width: 300px;
+        max-height: 250px;
+        border-radius: 20px;
+        background-size: cover;
+        background-position: center;
+
+    }
+}
+
+.news_item_username_con {
+    padding: 10px 10px 10px 30px;
+}
+
+.calendar_wrapper {
+    background-color: #eee;
+    padding: 20px;
+    border-radius: 20px;
+    margin: 10px;
+}
+

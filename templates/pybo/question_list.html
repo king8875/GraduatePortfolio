@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load pybo_filter %}
+{% block content %}
+
+
+<div class="question_list_wrapper">
+<div class="content_block">
+<h5 class="title">{{ category.description }}</h5>
+<h6 style="color: rgb(235, 80, 80);">※ 이곳은 반려동물에 관한 질문과 답변 페이지입니다. 관련성이 떨이지는 글은 관리자에 의해 삭제될 수 있습니다.</h6>             
+<div class="question_list_content_wrapper">
+                
+    <div>
+        <table class="table_wrapper">
+
+            <thead class="thead">
+            <tr>
+                <th>Number</th>
+                <th style="width:50%">Titledddde</th>
+                <th>Username</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% if question_list %}
+            {% for question in question_list %}
+            <tr class="question_content">
+                    <td class="number">
+                        <!-- 번호 = 전체건수 - 시작인덱스 - 현재인덱스 + 1 -->
+                        {{ question_list.paginator.count|sub:question_list.start_index|sub:forloop.counter0|add:1 }}
+                    </td>
+                    <td>
+                        <a href="{% url 'pybo:detail' question.id %}">{{ question.subject }}</a>
+                        {% if question.answer_set.count > 0 %}
+                        <span>{{ question.answer_set.count }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ question.author.username }}</td>  <!-- 글쓴이 추가 -->
+                    <td>{{ question.create_date }}</td>
+                
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="4">질문이 없습니다.</td>
+            </tr>
+            {% endif %}
+            </tbody>
+            
+        </table>
+
+        <div class="question_btn_con">
+
+            <a class="question_btn" href="{% url 'pybo:question_create' category.name %}">질문 등록하기</a> 
+
+        </div>
+
+
+        <!-- 페이징처리 시작 -->
+        <ul class="page_btn">
+            <!-- 이전페이지 -->
+            {% if question_list.has_previous %}
+            <li class="page_item">
+                <a href="?page={{ question_list.previous_page_number }}">이전</a>
+            </li>
+            {% else %}
+            <li class="page_item disabled">
+                <a tabindex="-1" aria-disabled="true" href="#">이전</a>
+            </li>
+            {% endif %}
+            <!-- 페이지리스트 -->
+            {% for page_number in question_list.paginator.page_range %}
+            {% if page_number >= question_list.number|add:-5 and page_number <= question_list.number|add:5 %}
+            {% if page_number == question_list.number %}
+            
+            <li class="page_item active" aria-current="page">
+                <a href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% else %}
+            <li class="page_item">
+                <a href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+            <!-- 다음페이지 -->
+            {% if question_list.has_next %}
+            <li class="page_item">
+                <a href="?page={{ question_list.next_page_number }}">다음</a>
+            </li>
+            {% else %}
+            <li class="page_item disabled">
+                <a tabindex="-1" aria-disabled="true" href="#">다음</a>
+            </li>
+            {% endif %}
+        </ul>
+        <!-- 페이징처리 끝 -->
+    </div>
+    </div>
+</div>
+</div>
+      
+ 
+
+
+
+        
+
+
+
+<script>
+  
+(() => {
+  'use strict'
+  const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  tooltipTriggerList.forEach(tooltipTriggerEl => {
+    new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+})()
+
+</script>
+{% endblock %}
+</html>

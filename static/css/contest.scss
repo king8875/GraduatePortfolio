@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    padding: 0;
+    box-sizing: border-box;
+    font-family:  'Montserrat','Noto Sans KR', 'sans-serif';
+}
+
+html {
+    line-height: 1.15;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    
+}
+.contest_wrapper {
+    background-color: #ffffff;
+    width: 100%;
+    margin-left: 10px;
+    border-radius: 20px;
+    padding: 20px;
+
+}
+
+.contest_title_con {
+    width: 100%;
+    background-color:#bfaeff;
+    padding: 20px;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 12px;
+
+}
+
+.contest_title {
+    font-size: 28px;
+
+}
+.contest_submit_btn {
+    background-color: #5429FF;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    font-size: 18px;
+    color: #fff;
+    border-radius: 12px;
+}
+.contest_item_con_ul {
+    display: flex;
+    
+}
+.contest_item_con {
+    display: flex;
+    background-color: aqua;
+    margin-bottom: 20px;
+}

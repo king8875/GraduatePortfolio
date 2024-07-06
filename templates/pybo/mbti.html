@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load pybo_filter %}
+{% block content %}
+<!doctype html>
+
+<html lang="kor">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bootstrap demo</title>
+  <link rel="stylesheet" href="{% static 'css/mbti.css' %}?after" type="text/css">
+
+  <!-- 폰트 추가 -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet" />
+</head>
+<!--                            댕비티아이 시작                            -->
+<div class="mbti_wrapper">
+  <article class="start">
+    <h1>강아지 MBTI 테스트</h1>
+    <button type="button" onclick="start();">
+      테스트 시작하기
+    </button>
+  </article>
+
+  <article class="question">
+    <div class="progress mt-5">
+      <div class="progress-bar" role="progressbar" style="background-color: black"></div>
+    </div>
+
+    <h2 id="title" class="questionMain">문제</h2>
+
+    <input id="type" type="hidden" value="EI" />
+
+    <button id="up" type="button" class="arrow_box mt-5" style="float: right">
+      Primary
+    </button>
+    <button id="down" type="button" class="arrow_downbox mt-5" style="float: left">
+      Primary
+    </button>
+    <button style="margin-top: 10%; height: 20%;" onclick="back1();">한칸 뒤로가기</button>
+    <button class="jj" value=""></button>
+  </article>
+  <article class="result">
+    <h3 id="subTitle" class="subtitle">설명</h3>
+    <h4 class="itemtitle" id="item" name="item1"></h4>
+    <img id="img" class="rounded-circle mt-5" src="test.jpg" alt="item" />
+    <h4 class="resulttitle" id="dogplaintitle" name="title1"></h4>
+    <h5 class="resultcontent" id="dogplain" name="1"></h5>
+    <h4 class="resulttitle" id="dogplaintitle2" name="title2"></h4>
+    <h5 class="resultcontent" id="dogplain2" name="2"> </h5>
+    <h4 class="resulttitle" id="dogplaintitle3" name="title3"></h4>
+    <h5 class="resultcontent" id="dogplain3" name="3"> </h5>
+    <h4 class="resulttitle">잘 맞는 유형</h4>
+    <h5 class="resultcontent" id="goodRel" name="4"> </h5>
+    <h4 class="resulttitle">안 맞는 유형</h4>
+    <h5 class="resultcontent" id="badRel" name="5"> </h5>
+
+    <!-- <button
+          style="margin-bottom: 40px"
+          class="btn btn-primary mt-5"
+          onclick="reset();"
+        >
+          다시 테스트 하기!
+        </button> -->
+
+    <div class="back">
+      <div class="button_base b03_skewed_slide_in">
+        <div>다시 테스트 하기!</div>
+        <div></div>
+        <div onclick="reset();">다시 테스트 하기!</div>
+      </div>
+    </div>
+
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+    <!-- <div class="share addthis_inline_share_toolbox"></div> -->
+  </article>
+  <!-- <article class="kakao_ad mt-5">
+      <ins class="kakao_ad_area" style="display: none" data-ad-unit="DAN-PwXjskx5WFbEMAMI" data-ad-width="320"
+        data-ad-height="100"></ins>
+    </article> -->
+  <!-- <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script> -->
+  <input type="hidden" id="EI" value="0" />
+  <input type="hidden" id="SN" value="0" />
+  <input type="hidden" id="TF" value="0" />
+  <input type="hidden" id="JP" value="0" />
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+    crossorigin="anonymous"></script>
+
+</div>
+
+<script src="{% static 'js/mbti.js' %}"></script>
+
+
+</html>
+
+
+
+
+
+
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-6084dd1e2440463a"></script>
+{% endblock %}

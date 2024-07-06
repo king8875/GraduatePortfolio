@@ -1,0 +1,308 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="forum_wrapper">
+
+  <h1 class="forum_title">Forum</h1>
+
+  <div class="forum_question_con">
+
+    <form id="forum-form" method="post">
+      {% csrf_token %}
+      <div class="title_con">
+        <label for="title-input">Title:</label>
+        <input type="text" id="title-input" name="title-input">
+      </div>
+
+      <div class="content_con">
+        <label for="content-input">content:</label>
+        <textarea id="content-input" name="content-input"></textarea>
+      </div>
+
+      <div class="forum_btn_con">
+        <button class="forum_btn" type="submit">글 작성</button>
+
+      </div>
+
+
+      <!-- <label for="image-input">Image:</label>
+          <input type="file" id="image-input"> -->
+
+    </form>
+
+    <div id="forum-posts"></div>
+
+  </div>
+
+
+  {% for question in questions %}
+  <div class="question_wrapper">
+
+    <div class="question">
+
+      <div class="question_title">
+
+        <!-- <div class="user-profile" >
+              <img src="프로필_이미지_경로" alt="">
+            </div> -->
+        <h3 class="question-subject">{{ question.subject }}</h3>
+        <div class="question_profile_con">
+          <p class="question-author">{{ question.author }}</p>
+          <p class="question_date">{{ question.create_date }}</p>
+        </div>
+
+      </div>
+
+      <div class="vote_delete_con">
+        <div class="forum_vote_con">
+          <a href="javascript:void(0)" class="recommend" data-uri="{% url 'pybo:forum_question_vote' question.id %}">
+            <i style="color: #fff;" class="fa-regular fa-heart"></i>
+            <span class="vote_count">{{question.voter.count}}</span>
+          </a>
+          <label for="content" class="comment">
+            <i class="fa-regular fa-comment"></i>
+            {{question.answers.count}}
+          </label>
+        </div>
+        <a href="javascript:void(0)" class="forum_delete delete"
+          data-uri="{% url 'pybo:forum_question_delete' question.id  %}">
+          <i class="fa-solid fa-trash"></i>
+        </a>
+      </div>
+
+
+
+
+      <div class="question_content">
+
+        <p class="question_content_p">{{ question.content }}</p>
+
+        <div class="comment_div">
+
+          <div class="forum_answer_con">
+            {% for answer in question.answers %}
+            <div class="forum_user_profile">
+
+              <div class="answer_user_profile">
+                <p>{{ answer.author }}</p>
+                <p class="answer_createdate">{{ answer.create_date }}</p>
+              </div>
+
+              <div class="answer_content">{{ answer.content }}</div>
+
+              <div class="answer_modify_delete">
+                {% if request.user == answer.author %}
+                <a href="{% url 'pybo:forum_answer_modify' answer.id  %}">수정</a>
+                <a href="{% url 'pybo:forum_answer_delete' answer.id  %}">삭제</a>
+                {% endif %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- 답변 등록 -->
+      <form action="{% url 'pybo:create_forum_answer' question.id %}" method="post">
+        {% csrf_token %}
+        <!-- 오류표시 Start -->
+        {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+          {% for field in form %}
+          {% if field.errors %}
+          <div>
+            <strong>{{ field.label }}</strong>
+            {{ field.errors }}
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
+        <!-- 오류표시 End -->
+
+        <div class="answer_input_con">
+          <hr>
+          <div class="answer_input">
+            <input {% if not user.is_authenticated %}disabled{% endif %} name="content" id="content"
+              class="form-control"></input>
+            <input class="answer_input_btn" type="submit" value="답변등록">
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+  {% endfor %}
+</div>
+</div>
+
+<script>
+
+  const form = document.getElementById('forum-form');
+  const postsContainer = document.getElementById('forum-posts');
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault(); // 기본 제출 동작 방지
+
+    // 제목과 내용을 가져오기
+    const titleInput = document.getElementById('title-input');
+    const contentInput = document.getElementById('content-input');
+    // const imgInput = document.getElementById('image-input');
+
+    const subject = titleInput.value;
+    const content = contentInput.value;
+    // const forum_img = imgInput.files[0];
+    console.log(subject, content);
+
+
+    // 제목과 내용이 비어있는지 확인
+    if (subject === '' || content === '') {
+      alert('제목과 내용을 입력해주세요.');
+      return;
+    }
+
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    console.log(csrftoken);
+
+    // Ajax 요청 보내기 게시물 등록
+    $.ajax({
+      method: "POST",
+      url: "{% url 'pybo:create_forum_question' %}",  // Django URL 설정에 맞게 수정해야 함
+      data: {
+        subject: subject,
+        content: content,
+        // forum_img: forum_img,
+        csrfmiddlewaretoken: csrftoken
+
+
+      },
+      success: function (response) {
+        // 성공적으로 저장되면 새로운 게시물 요소 생성
+        alert('게시물을 작성했습니다');
+        window.location.reload();
+        console.log("success");
+
+        // 게시물 요소를 컨테이너에 추가
+        postsContainer.appendChild(postElement);
+
+        // 입력 필드 초기화
+        form.reset();
+      },
+      error: function (error) {
+        alert('게시물을 저장하는 동안 오류가 발생했습니다.');
+        console.log(error);
+      }
+    });
+  });
+
+
+  // 댓글 작성 폼 제출 이벤트를 가로채고 Ajax 요청 보내기
+  $('#answer-form').on('submit', function (event) {
+    event.preventDefault(); // 기본 제출 동작 방지
+
+    const form = $(this);
+    const formData = form.serialize(); // 폼 데이터 가져오기
+    // http://127.0.0.1:8000/pybo/group/create_forum_answer/
+
+    $.ajax({
+      url: "/pybo/create_forum_answer/",  // Django URL 설정에 맞게 수정해야 함
+      method: 'POST',
+      data: formData,
+      success: function (response) {
+        // 성공적으로 댓글이 저장되면 새로운 댓글 요소 생성
+        const answerElement = $('<div class="answer">');
+        answerElement.html(`
+        <p>${response.content}</p>
+        <p>작성자: ${response.author}</p>
+        <p>작성일: ${response.create_date}</p>
+      `);
+
+        // 댓글 목록에 새로운 댓글 요소 추가
+        $('#answers').append(answerElement);
+
+        // 입력 필드 초기화
+        form.find('textarea').val('');
+      },
+      error: function (error) {
+        alert('댓글을 저장하는 동안 오류가 발생했습니다.');
+        console.log(error);
+      }
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const recommendButtons = document.querySelectorAll('.recommend');
+
+    recommendButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        const url = this.getAttribute('data-uri');
+
+        // CSRF 토큰 가져오기
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              // 추천 수 업데이트
+              const vote_count = this.querySelector('.vote_count');
+              vote_count.textContent = data.voter_count;
+              alert('추천이 성공적으로 완료되었습니다.');
+
+            } else {
+              alert('추천에 실패했습니다.');
+            }
+          })
+          .catch(error => console.error('Error:', error));
+      });
+    });
+  });
+
+  const deleteButtons = document.querySelectorAll('.delete');
+
+  deleteButtons.forEach(button => {
+    button.addEventListener('click', function () {
+      const url = this.getAttribute('data-uri');
+      const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+      if (confirm('정말로 삭제하시겠습니까?')) {
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': csrftoken,
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        })
+          .then(response => {
+            if (response.ok) {
+              alert('삭제되었습니다.');
+              window.location.reload();
+            } else {
+              alert('댓글 삭제에 실패했습니다.');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('댓글 삭제 중 오류가 발생했습니다.');
+          });
+      }
+    });
+  });
+
+
+
+
+
+</script>
+
+{% endblock %}

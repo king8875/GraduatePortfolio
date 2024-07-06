@@ -1,0 +1,333 @@
+{% extends 'base.html' %}
+{% load pybo_filter %}
+{% block content %}
+{% load static %}
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" />
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+
+<div class="main_wrapper">
+
+  <div style="overflow-x: hidden;">
+    <div class="test_container">
+      <div class="slide-container">
+        <ul class="slide">
+          <li><a><img src="{% static 'img/dog_img01.png' %}"></a></li>
+          <li><a><img src="{% static 'img/dog_img01.png' %}"></a></li>
+          <li><a><img src="{% static 'img/dog_img01.png' %}"></a></li>
+        </ul>
+
+        <button class="pre"><i class="fa-solid fa-angle-right"></i></button>
+        <button class="next"><i class="fa-solid fa-angle-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="mid_content_wrapper">
+
+      <!-- 프로필 카드 컴포넌트 -->
+    <div class="main_profile_con">
+
+      <div class="profile_img_con">
+        <img src="{% static 'img/profile_img.jpg' %}" onclick="openModal()">
+      </div>
+
+
+      <div>
+        <h5 class="profile_username">{{ user.username }}</h5>
+
+
+        <div class="profile_item_con">
+
+          <div>
+            <a href="{% url 'pybo:user_profile' %}">
+              <i class="fa-regular fa-user"></i>
+            </a>
+          </div>
+          <div>
+            <a href="{% url 'pybo:calendar' %}">
+              <i class="fa-regular fa-calendar"></i>
+            </a>
+          </div>
+          <div>
+            <a href="{% url 'pybo:main' %}">
+              <i class="fa-solid fa-gear"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- 프로필 사진 누르면 프로필 수정 페이지 나옴 -->
+        <div class="modal_con" id="modal">
+          <div class="modal_content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div>
+              <h2>Edit Profile</h2>
+              <div>
+                <h6>First Name</h6>
+                <input type="text" placeholder="{{ user.username }}" onblur="this.placeholder" />
+              </div>
+
+              <div>
+                <h6>E-mail</h6>
+                <input type="text" placeholder="{{ user.email }}" />
+
+
+                <h6>Password</h6>
+                <input />
+              </div>
+
+              <div class="profile_commit_btn_con">
+                <div>Cancel</div>
+                <div> Save </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- 프로필 수정 모달창 닫기 -->
+
+      </div>
+    </div>
+    <!-- 프로필 카드 컴포넌트 끝 -->
+
+    <!-- 금주의 댕콘테스트 컴포넌트  -->
+    <div class="weekly_contest_con">
+      <div class="weekly_contest_title">
+        <p>Contest</p>
+      </div>
+      <div class="weekly_dogs_con">
+
+        {% if question_list1 %}
+        {% for question in question_list1 %}
+
+        <div class="contest_box">
+          <div style="display: flex; height: 100%;">
+            {% if question.thumbnail %}
+            <div class="box_content">
+              <div class="img_content background_cover" style="background-image: url('{{ question.thumbnail.url }}'); ">
+                <div class="author_name_con">
+                  {{question.author.username}}
+
+                </div>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        {% endfor %}
+        {% else %}
+        <p>no questions</p>
+        {% endif %}
+      </div>
+
+    </div>
+
+  </div>
+  <!-- 금주의 댕콘테스트 컴포넌트 끝 -->
+
+  <div class="calendar_wrapper">
+    <div>
+      <div id="calendar">
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
+
+
+<!-- 뉴스 사이드 컴포넌트  -->
+<div class="news_wrapper">
+  <div class="news_title">News</div>
+  {% if question_list %}
+  {% for question in question_list %}
+  <div class="news_item">
+
+    {% if question.thumbnail %}
+    <div class="news_item_img_con background_cover">
+      <a href="{% url 'pybo:expert_detail' question.id %}">
+        <img src="{{ question.thumbnail.url }}" alt="no_img">
+      </a>
+    </div>
+
+    <div class="news_item_username_con">
+      <h4>{{ question.subject }}</h4>
+      <p>{{ question.author.username }}</p>
+    </div>
+
+
+    <!-- <img src="{{ question.thumbnail.url }}" class="card-img-top" alt="no_img" style="max-height: 300px; border-radius: 10px;"> -->
+    <!-- <a href="{% url 'pybo:expert_detail' question.id %}">보기</a> -->
+    {% endif %}
+
+   
+
+  </div>
+  {% endfor %}
+  {% endif %}
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script>
+
+<script>
+  $(document).ready(function () {
+    var calendar = $('#calendar').fullCalendar({
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay'
+      },
+      events: '/pybo/all_events',
+      selectable: true,
+      selectHelper: true,
+      editable: true,
+      eventLimit: true,
+      select: function (start, end, allDay) {
+        var title = prompt("Enter Event Title");
+        if (title) {
+          var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm:ss");
+          var end = $.fullCalendar.formatDate(end, "Y-MM-DD HH:mm:ss");
+          $.ajax({
+            type: "GET",
+            url: '/pybo/add_event',
+            data: { 'title': title, 'start': start, 'end': end },
+            dataType: "json",
+            success: function (data) {
+              calendar.fullCalendar('refetchEvents');
+              alert("Added Successfully");
+            },
+            error: function (data) {
+              alert('There is a problem1!!!');
+            }
+          });
+        }
+      },
+      eventResize: function (event) {
+        var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+        var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+        var title = event.title;
+        var id = event.id;
+        $.ajax({
+          type: "GET",
+          url: '/pybo/update',
+          data: { 'title': title, 'start': start, 'end': end, 'id': id },
+          dataType: "json",
+          success: function (data) {
+            calendar.fullCalendar('refetchEvents');
+            alert('Event Update');
+          },
+          error: function (data) {
+            alert('There is a problem2!!!');
+          }
+        });
+      },
+
+      eventDrop: function (event) {
+        var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+        var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+        var title = event.title;
+        var id = event.id;
+        $.ajax({
+          type: "GET",
+          url: '/pybo/update',
+          data: { 'title': title, 'start': start, 'end': end, 'id': id },
+          dataType: "json",
+          success: function (data) {
+            calendar.fullCalendar('refetchEvents');
+            alert('Event Update');
+          },
+          error: function (data) {
+            alert('There is a problem3!!!');
+          }
+        });
+      },
+
+      eventClick: function (event) {
+        if (confirm("Are you sure you want to remove it?")) {
+          var id = event.id;
+          $.ajax({
+            type: "GET",
+            url: '/pybo/remove',
+            data: { 'id': id },
+            dataType: "json",
+            success: function (data) {
+              calendar.fullCalendar('refetchEvents');
+              alert('Event Removed');
+            },
+            error: function (data) {
+              alert('There is a problem4!!!');
+            }
+          });
+        }
+      },
+
+    });
+  });
+
+</script>
+
+<script>
+  function openModal() {
+    document.getElementById("modal").style.display = "block";
+  }
+
+  function closeModal() {
+    document.getElementById("modal").style.display = "none";
+  }
+
+  window.onclick = function (event) {
+    var modal = document.getElementById("modal");
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+</script>
+
+<!-- <style>
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+</style> -->
+
+
+{% endblock %}
+
+<!-- 자바스크립트 End -->
