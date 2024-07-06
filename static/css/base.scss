@@ -16,7 +16,6 @@ html {
 body {
     padding: 0;
     margin: 0;
-    
 }
 
 ul {
@@ -25,8 +24,7 @@ ul {
     margin: 0;
 }
 li {
-    width: 100%;
-    
+    width: 100%;    
 }
 a {
     text-decoration: none;
@@ -195,17 +193,33 @@ p {
 .footer_con {
     display: flex;
     padding: 20px;
-    color: black;
+    color: rgb(255, 255, 255);
     width: 100%;
-    background-color: #868686;
+    background-color: #afafaf;
+    border-radius: 12px 12px 0 0;
+    justify-content: space-between;
+    height: 100px;
+    align-items: center;
+}
 
-    ul {
-        display: flex;
-    }
+.footer_ul {
+    display: flex;
+    gap: 20px;
+    color: rgb(255, 255, 255);
+
+}
+
+.footer_item {
+    color: #fff;
 }
 
 .user_name_content {
     line-height: 20px;
+}
+
+.footer_icon {
+    font-size: 24px;
+    margin-right: 100px;
 }
 
 

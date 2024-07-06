@@ -8,7 +8,7 @@
     <div class="content_block">
 
         <div class="expert_top_con">
-            <div>{{ category.description }}</div>
+            <div>Expert Column</div>
             <a href="{% url 'pybo:expert_create' category.name %}" class="expert_submit_btn">글 등록하기</a>
         </div>
             <div class="expert_content">
@@ -26,7 +26,6 @@
                     {% endif %}
                     <div class="expert_text_con">
                         
-                            
                                 <!-- 제목 -->
                                 <div class="expert_subject">
                                     <a href="{% url 'pybo:expert_detail' question.id %}">{{ question.subject }}</a>
