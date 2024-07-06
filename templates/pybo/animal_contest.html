@@ -15,95 +15,86 @@
 <body>
 
     <div class="contest_wrapper">
-        <div>
-            <div>
-                <div id="content">
-                    <div class="content_block">
-                    <h5 class="contest_title_con">
-                        <p class="contest_title">Dang 콘테스트</p>
-                        
-                        <a class="contest_submit_btn" href="{% url 'pybo:animal_write' 'animal_ranking' %}">글 등록하기</a>
-                    </h5>        
+        <h5 class="contest_title_con">
+            <p class="contest_title">Dang 콘테스트</p>
+            <a class="contest_submit_btn" href="{% url 'pybo:animal_write' 'animal_ranking' %}">글 등록하기</a>
+        </h5>  
+        
+        <div class="contest_list">
+
             {% if question_list %}
             {% for question in question_list %}
                 <div class="contest_item_con_ul">
+
                     <div class="contest_item_con">
+                        {% if question.thumbnail %}
+                        <img src="{{ question.thumbnail.url }}" alt="{{question.subject}}" width = "250" height="225">
+                        {% endif %}
                         
-                            {% if question.thumbnail %}
-                            <img src="{{ question.thumbnail.url }}" alt="{{question.subject}}" width = "350" height="225">
-                            {% endif %}
-                        
-                            <small>{{ question.author.username }}</small>
+                        <p>{{ question.author.username }}</p>
+                        <div>
                             <div>
                                 <div>
-                                    <div>
-                                        <a href="javascript:void(0)" data-uri="{% url 'pybo:animal_vote' question.id  %}"> 
-                                            추천
-                                            <span>{{question.voter.count}}</span>
-                                        </a>
-                                    </div>
+                                    <a href="javascript:void(0)" data-uri="{% url 'pybo:animal_vote' question.id  %}"> 
+                                        추천
+                                        <span>{{question.voter.count}}</span>
+                                    </a>
                                 </div>
-                                <small>{{ question.create_date }}</small>
                             </div>
-                        
+                            <small>{{ question.create_date }}</small>
+                        </div>
                     </div>
 
                 </div>
             {% endfor %}
             {% else %}
-            <tr>
-                <td colspan="4">칼럼이 없습니다.</td>
-            </tr>
             {% endif %}
-                </div>
-            
-            </div>
-    
-    
-    
-    
-            <!-- 페이징처리 시작 -->
-            <ul>
-                <!-- 이전페이지 -->
-                {% if question_list.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ question_list.previous_page_number }}">이전</a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
-                </li>
-                {% endif %}
-                <!-- 페이지리스트 -->
-                {% for page_number in question_list.paginator.page_range %}
-                {% if page_number >= question_list.number|add:-5 and page_number <= question_list.number|add:5 %}
-                {% if page_number == question_list.number %}
-                <li class="page-item active" aria-current="page">
-                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
-                </li>
-                {% else %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
-                </li>
-                {% endif %}
-                {% endif %}
-                {% endfor %}
-                <!-- 다음페이지 -->
-                {% if question_list.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ question_list.next_page_number }}">다음</a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
-                </li>
-                {% endif %}
-            </ul>
-            <!-- 페이징처리 끝 -->
-            </div>
-    
         </div>
+
+
+        <!-- 페이징처리 시작 -->
+        <ul class="contest_page_ul">
+            <!-- 이전페이지 -->
+            {% if question_list.has_previous %}
+            <li>
+                <a href="?page={{ question_list.previous_page_number }}">이전</a>
+            </li>
+            {% else %}
+            <li class="disabled">
+                <a tabindex="-1" aria-disabled="true" href="#">이전</a>
+            </li>
+            {% endif %}
+            <!-- 페이지리스트 -->
+            {% for page_number in question_list.paginator.page_range %}
+            {% if page_number >= question_list.number|add:-5 and page_number <= question_list.number|add:5 %}
+            {% if page_number == question_list.number %}
+            <li class="active" aria-current="page">
+                <a href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% else %}
+            <li>
+                <a href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+            <!-- 다음페이지 -->
+            {% if question_list.has_next %}
+            <l>
+                <a href="?page={{ question_list.next_page_number }}">다음</a>
+            </li>
+            {% else %}
+            <li class="disabled">
+                <a tabindex="-1" aria-disabled="true" href="#">다음</a>
+            </li>
+            {% endif %}
+        </ul>
+        <!-- 페이징처리 끝 -->
+        
     </div>
+    
+
+
     
 </body>
 </html>
@@ -111,7 +102,7 @@
 
 {% endblock %}
 {% block script %}
-<!-- <script type='text/javascript'>
+<script type='text/javascript'>
 const delete_elements = document.getElementsByClassName("delete");
 Array.from(delete_elements).forEach(function(element) {
     element.addEventListener('click', function() {
@@ -128,5 +119,5 @@ Array.from(recommend_elements).forEach(function(element) {
         };
     });
 });
-</script> -->
+</script>
 {% endblock %}

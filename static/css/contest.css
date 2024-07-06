@@ -20,6 +20,9 @@ body {
   margin-left: 10px;
   border-radius: 20px;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .contest_title_con {
@@ -47,6 +50,11 @@ body {
   border-radius: 12px;
 }
 
+.contest_list {
+  background-color: #bfaeff;
+  display: flex;
+}
+
 .contest_item_con_ul {
   display: flex;
 }
@@ -55,4 +63,10 @@ body {
   display: flex;
   background-color: aqua;
   margin-bottom: 20px;
+}
+
+.contest_page_ul {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }/*# sourceMappingURL=contest.css.map */
