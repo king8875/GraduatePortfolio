@@ -19,7 +19,7 @@ from django.db.models import Q
 from django.db.models import Count
 from .models import Post, Photo, Events
 from django.http import JsonResponse
-import cv2
+# import cv2
 import os
 from django.core.files.storage import default_storage
 from .models import Tanalyze
@@ -886,41 +886,41 @@ def add_patient(request):
 
 
 
-def process_image_function(img):
-    # 이미지 처리
-    x = cv2.Sobel(img, cv2.CV_16S, 1, 0)
-    y = cv2.Sobel(img, cv2.CV_16S, 0, 1)
-    absX = cv2.convertScaleAbs(x)  # uint8로 변환
-    absY = cv2.convertScaleAbs(y)
-    result = cv2.addWeighted(absX, 0.5, absY, 0.5, 0)
+# def process_image_function(img):
+#     # 이미지 처리
+#     x = cv2.Sobel(img, cv2.CV_16S, 1, 0)
+#     y = cv2.Sobel(img, cv2.CV_16S, 0, 1)
+#     absX = cv2.convertScaleAbs(x)  # uint8로 변환
+#     absY = cv2.convertScaleAbs(y)
+#     result = cv2.addWeighted(absX, 0.5, absY, 0.5, 0)
 
-    return result
+#     return result
 
 
 
-def process_image(request):
-    # Tanalyze 모델 인스턴스 가져오기
-    tanalyze_instance = Tanalyze.objects.all()[1]  # 예시로 첫 번째 인스턴스를 가져옴
+# def process_image(request):
+#     # Tanalyze 모델 인스턴스 가져오기
+#     tanalyze_instance = Tanalyze.objects.all()[1]  # 예시로 첫 번째 인스턴스를 가져옴
 
-    # 이미지 파일 읽기
-    image = tanalyze_instance.side_sephalo  
-    # 이미지 파일 읽기
-    img = cv2.imread(image.path)
-    # 이미지 처리
-    result = process_image_function(img)
+#     # 이미지 파일 읽기
+#     image = tanalyze_instance.side_sephalo  
+#     # 이미지 파일 읽기
+#     img = cv2.imread(image.path)
+#     # 이미지 처리
+#     result = process_image_function(img)
 
-    # 결과 이미지를 저장할 필드에 할당
-    result_image = ContentFile(cv2.imencode('.jpg', result)[1].tostring())
+#     # 결과 이미지를 저장할 필드에 할당
+#     result_image = ContentFile(cv2.imencode('.jpg', result)[1].tostring())
 
-    # Tanalyze 모델 인스턴스 업데이트
-    tanalyze_instance.side_sephalo_line.save('result.jpg', result_image)
+#     # Tanalyze 모델 인스턴스 업데이트
+#     tanalyze_instance.side_sephalo_line.save('result.jpg', result_image)
   
-    # 결과 이미지의 URL을 변수에 할당
-    result_image_url = tanalyze_instance.side_sephalo_line.url
+#     # 결과 이미지의 URL을 변수에 할당
+#     result_image_url = tanalyze_instance.side_sephalo_line.url
 
-    context = {'result_image_url': result_image_url}
+#     context = {'result_image_url': result_image_url}
 
-    return render(request, '6.ai-Check/createData_line.html', context)
+#     return render(request, '6.ai-Check/createData_line.html', context)
 
 
 
