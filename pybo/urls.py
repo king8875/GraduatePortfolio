@@ -89,30 +89,8 @@ urlpatterns = [
 
 
 
-    # 3. board
-    path('board/news/', views.newsBoard, name='newsBoard'),
-    path('board/medicalInfo/', views.medicalInfoBoard, name='medicalInfoBoard'),
-    path('board/etc/', views.etcBoard, name='etcBoard'),
 
-
-    # 4. board
-    path('chatgpt/search/', views.searchChatgpt, name='searchChatgpt'),
-    path('chatgpt/relatedInformation/', views.relatedInformationChatgpt, name='relatedInformationChatgpt'),
-    path('chatgpt/etc/', views.etcChatgpt, name='etcChatgpt'),
-
-
-    # 5. registration
-    path('registration/publicUser/', views.publicUserRegistration, name='publicUserRegistration'),
-    path('registragion/medicalUser/', views.medicalUserRegistration, name='medicalUserRegistration'),
-    path('registration/etc/', views.etcRegistration, name='etcRegistration'),
-
-
-    # 6. ai-Check
-    path('aiCheck/createData/', views.createDataAICheck, name='createDataAICheck'),
-    path('aiCheck/createPHR/', views.createPHRAICheck, name='createPHRAICheck'),
-    path('aiCheck/etc/', views.etcAICheck, name='etcAICheck'),
-
-
+    
     # 7. setting
     path('setting/', views.setting, name='setting'),
 

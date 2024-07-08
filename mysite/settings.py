@@ -120,8 +120,15 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
+        # 'ENGINE' : 'django.db.backends.mysql',
+        # 'NAME' : 'dhgh8875$graduateproject',
+        # 'USER' : 'dhgh8875',
+        # 'PASSWORD' : '@@King4500',
+        # 'HOST' : 'dhgh8875.mysql.pythonanywhere-services.com'
     }
 }
+
+
 
 
 # Password validation
