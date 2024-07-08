@@ -19,7 +19,7 @@
           <li><a><img src="{% static 'img/dog_img01.png' %}"></a></li>
         </ul>
 
-        <button class="pre"><i class="fa-solid fa-angle-right"></i></button>
+        <button class="prev"><i id="prev_btn" class="fa-solid fa-angle-right"></i></button>
         <button class="next"><i class="fa-solid fa-angle-right"></i></button>
       </div>
     </div>
@@ -37,6 +37,12 @@
       </div>
       
       <p class="profile_username">{{ user.username }}</p>
+
+      <div class="profile_tag_con">
+        <p>Student</p>
+        <p>Premium</p>
+
+      </div>
 
         <div class="profile_item_con">
           <div>
@@ -60,28 +66,33 @@
         <div class="modal_con" id="modal">
           <div class="modal_content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <div>
-              <h2>Edit Profile</h2>
+
+            <form id="editProfileForm" method="post" >
+              {% csrf_token %}
               <div>
-                <h6>First Name</h6>
-                <input type="text" placeholder="{{ user.username }}" onblur="this.placeholder" />
+                <h2>Edit Profile</h2>
+                <div>
+                  <h6>First Name</h6>
+                  <input type="text" placeholder="{{ user.username }}" value="{{ user.username }}"/>
+                </div>
+  
+                <div>
+                  <h6>E-mail</h6>
+                  <input type="text" placeholder="{{ user.email }}" value="{{ user.email }}" />
+  
+  
+                  <h6>Password</h6>
+                  <input type="text" placeholder="{{ user.password }}" value="{{ user.password }}" />
+                </div>
+  
+                <div class="profile_commit_btn_con">
+                  <div>Cancel</div>
+                  <button type="submit">Save</button>
+                </div>
+  
               </div>
-
-              <div>
-                <h6>E-mail</h6>
-                <input type="text" placeholder="{{ user.email }}" />
-
-
-                <h6>Password</h6>
-                <input />
-              </div>
-
-              <div class="profile_commit_btn_con">
-                <div>Cancel</div>
-                <div> Save </div>
-              </div>
-
-            </div>
+            </form>
+           
           </div>
         </div>
         <!-- 프로필 수정 모달창 닫기 -->

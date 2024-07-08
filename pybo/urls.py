@@ -3,12 +3,13 @@ from pybo.views import MovieViewSet
 from django.contrib.auth import views as auth_views
 from . import views
 from django.urls import path, include, re_path
-from .views import patient_list, add_patient
 
 app_name = 'pybo'
 
 urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+
+    # path('edit_profile/', views.edit_profile, name='edit_profile'),
 
     #path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     #path('password_reset_done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
@@ -64,16 +65,10 @@ urlpatterns = [
     path('train_gpt/', views.train_gpt, name='train_gpt'),
     
 
-    # 1. Channel-Community
-    path('channelCommunity/create/', views.createChannel, name='createChannel'),
-    path('channelCommunity/list/', views.listChannel, name='listChannel'),
-    path('channelCommunity/medicalCase/', views.medicalCaseChannel, name='medicalCaseChannel'),
-    path('channelCommunity/schedule/', views.scheduleChannel, name='scheduleChannel'),
+
 
 
     # 2. group
-    path('group/create/', views.createGroup, name='createGroup'),
-    path('group/list/', views.listGroup, name='listGroup'),
     path('group/forum/', views.forumGroup, name='forumGroup'),
     
     path('group/create_forum_question/', views.create_forum_question, name='create_forum_question'),
@@ -101,8 +96,6 @@ urlpatterns = [
     path('update/',views.update, name='update'),
     path('remove/',views.remove, name='remove'),
 
-    path('patient_list/', views.patient_list, name='patient_list'),
-    path('add_patient/', views.add_patient, name='add_patient'),
 
 
 ]

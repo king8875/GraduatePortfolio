@@ -118,10 +118,6 @@ def main(request, category_name='expert'):
     return render(request, 'pybo/main.html', context)
 
 
-
-
-
-
 def index(request, category_name='qna'):
     
     # 입력 파라미터
@@ -208,11 +204,7 @@ def detail(request, question_id):
     context = {'question': question, 'photo' : photo}
     return render(request, 'pybo/question_detail.html', context)
 
-def expert_detail(request, question_id):
-    question = get_object_or_404(Expert, pk=question_id)
-    photo = Photo.objects.all()
-    context = {'question': question, 'photo' : photo}
-    return render(request, 'pybo/expert_detail.html', context)
+
 
 @login_required(login_url='common:login')
 def answer_create(request, question_id):
@@ -232,24 +224,7 @@ def answer_create(request, question_id):
     context = {'question': question, 'form': form}
     return render(request, 'pybo/question_detail.html', context)
 
-@login_required(login_url='common:login')
-def expert_answer_create(request, question_id):
-    question = get_object_or_404(Expert, pk=question_id)
-    if request.method == "POST":
-        form = ExpertAnswerForm(request.POST)
-        if form.is_valid():
-            answer = form.save(commit=False)
-            answer.author = request.user  # author 속성에 로그인 계정 저장
-            answer.create_date = timezone.now()
-            answer.question = question
-            answer.save()
-            print(question.id)
-            return redirect('{}#answer_{}'.format(
-                resolve_url('pybo:expert_detail', question_id=question.id), answer.id))
-    else:
-        form = ExpertAnswerForm()
-    context = {'question': question, 'form': form}
-    return render(request, 'pybo/expert_detail.html', context)
+
 
 @login_required(login_url='common:login')
 def question_create(request, category_name):
@@ -289,45 +264,7 @@ def question_modify(request, question_id):
     context = {'form': form, 'category': question.category}
     return render(request, 'pybo/question_form.html', context)
 
-@login_required(login_url='common:login')
-def expert_modify(request, question_id):
-    question = get_object_or_404(Expert, pk=question_id)
-    if request.user != question.author:
-        print('hi')
-        messages.error(request, '수정권한이 없습니다')
-        return redirect('pybo:expert_detail', question_id=question.id)
-    if request.method == "POST":
-        form = ExpertForm(request.POST, instance=question)
-        if form.is_valid():
-            question = form.save(commit=False)
-            question.modify_date = timezone.now()  # 수정일시 저장
-            question.save()
-            return redirect('pybo:expert_detail', question_id=question.id)
-    else:
-        form = ExpertForm(instance=question)
-    context = {'form': form, 'category': question.category}
-    return render(request, 'pybo/question_form.html', context)
 
-
-
-@login_required(login_url='common:login')
-def expert_answer_modify(request, answer_id):
-    answer = get_object_or_404(Expert_answer, pk=answer_id)
-    if request.user != answer.author:
-        messages.error(request, '수정권한이 없습니다')
-        return redirect('pybo:detail', question_id=answer.question.id)
-    if request.method == "POST":
-        form = ExpertAnswerForm(request.POST, instance=answer)
-        if form.is_valid():
-            answer = form.save(commit=False)
-            answer.modify_date = timezone.now()
-            answer.save()
-            return redirect('{}#answer_{}'.format(
-                resolve_url('pybo:expert_detail', question_id=answer.question.id), answer.id))
-    else:
-        form = AnswerForm(instance=answer)
-    context = {'answer': answer, 'form': form}
-    return render(request, 'pybo/answer_form.html', context)
 
 @login_required(login_url='common:login')
 def question_delete(request, question_id):
@@ -338,14 +275,7 @@ def question_delete(request, question_id):
     question.delete()
     return redirect('pybo:index')
 
-@login_required(login_url='common:login')
-def expert_delete(request, question_id):
-    question = get_object_or_404(Expert, pk=question_id)
-    if request.user != question.author:
-        messages.error(request, '삭제권한이 없습니다')
-        return redirect('pybo:expert_detail', question_id=question.id)
-    question.delete()
-    return redirect('pybo:expert')
+
 
 @login_required(login_url='common:login')
 def answer_modify(request, answer_id):
@@ -375,14 +305,7 @@ def answer_delete(request, answer_id):
         answer.delete()
     return redirect('pybo:detail', question_id=answer.question.id)
 
-@login_required(login_url='common:login')
-def expert_answer_delete(request, answer_id):
-    answer = get_object_or_404(Expert_answer, pk=answer_id)
-    if request.user != answer.author:
-        messages.error(request, '삭제권한이 없습니다')
-    else:
-        answer.delete()
-    return redirect('pybo:expert_detail', question_id=answer.question.id)
+
 
 
 @login_required(login_url='common:login')
@@ -394,14 +317,7 @@ def question_vote(request, question_id):
         question.voter.add(request.user)
     return redirect('pybo:detail', question_id=question.id)
 
-@login_required(login_url='common:login')
-def expert_vote(request, expert_id):
-    expert = get_object_or_404(Expert, pk=expert_id)
-    if request.user == expert.author:
-        messages.error(request, '본인이 작성한 글은 추천할수 없습니다')
-    else:
-        expert.voter.add(request.user)
-    return redirect('pybo:expert_detail', expert_id=expert.id)
+
 
 @login_required(login_url='common:login')
 def answer_vote(request, answer_id):
@@ -412,9 +328,6 @@ def answer_vote(request, answer_id):
         answer.voter.add(request.user)
     return redirect('{}#answer_{}'.format(
                 resolve_url('pybo:detail', question_id=answer.question.id), answer.id))
-
-
-
 
 @login_required(login_url='common:login')
 def user_profile(request):
@@ -443,13 +356,7 @@ def user_answer(request):
 
 
 
-
-
-
-
-
-
-
+# expert view/////////////////////////////////
 
 def expert(request, category_name='expert'):
     '''
@@ -494,6 +401,12 @@ def expert(request, category_name='expert'):
                'category_list': category_list, 'category': category, 'expert':expert}
     return render(request, 'pybo/expert_list.html', context)
 
+def expert_detail(request, question_id):
+    question = get_object_or_404(Expert, pk=question_id)
+    photo = Photo.objects.all()
+    context = {'question': question, 'photo' : photo}
+    return render(request, 'pybo/expert_detail.html', context)
+
 
 @login_required(login_url='common:login')
 def expert_create(request, category_name):
@@ -527,6 +440,94 @@ def expert_create(request, category_name):
     context = {'form': form, 'category': category, 'author' : request.user}
     return render(request, 'pybo/question_form.html', context)
 
+@login_required(login_url='common:login')
+def expert_vote(request, expert_id):
+    expert = get_object_or_404(Expert, pk=expert_id)
+    if request.user == expert.author:
+        messages.error(request, '본인이 작성한 글은 추천할수 없습니다')
+    else:
+        expert.voter.add(request.user)
+    return redirect('pybo:expert_detail', expert_id=expert.id)
+
+@login_required(login_url='common:login')
+def expert_answer_delete(request, answer_id):
+    answer = get_object_or_404(Expert_answer, pk=answer_id)
+    if request.user != answer.author:
+        messages.error(request, '삭제권한이 없습니다')
+    else:
+        answer.delete()
+    return redirect('pybo:expert_detail', question_id=answer.question.id)
+
+@login_required(login_url='common:login')
+def expert_delete(request, question_id):
+    question = get_object_or_404(Expert, pk=question_id)
+    if request.user != question.author:
+        messages.error(request, '삭제권한이 없습니다')
+        return redirect('pybo:expert_detail', question_id=question.id)
+    question.delete()
+    return redirect('pybo:expert')
+
+@login_required(login_url='common:login')
+def expert_modify(request, question_id):
+    question = get_object_or_404(Expert, pk=question_id)
+    if request.user != question.author:
+        print('hi')
+        messages.error(request, '수정권한이 없습니다')
+        return redirect('pybo:expert_detail', question_id=question.id)
+    if request.method == "POST":
+        form = ExpertForm(request.POST, instance=question)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.modify_date = timezone.now()  # 수정일시 저장
+            question.save()
+            return redirect('pybo:expert_detail', question_id=question.id)
+    else:
+        form = ExpertForm(instance=question)
+    context = {'form': form, 'category': question.category}
+    return render(request, 'pybo/question_form.html', context)
+
+
+
+@login_required(login_url='common:login')
+def expert_answer_modify(request, answer_id):
+    answer = get_object_or_404(Expert_answer, pk=answer_id)
+    if request.user != answer.author:
+        messages.error(request, '수정권한이 없습니다')
+        return redirect('pybo:detail', question_id=answer.question.id)
+    if request.method == "POST":
+        form = ExpertAnswerForm(request.POST, instance=answer)
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.modify_date = timezone.now()
+            answer.save()
+            return redirect('{}#answer_{}'.format(
+                resolve_url('pybo:expert_detail', question_id=answer.question.id), answer.id))
+    else:
+        form = AnswerForm(instance=answer)
+    context = {'answer': answer, 'form': form}
+    return render(request, 'pybo/answer_form.html', context)
+
+@login_required(login_url='common:login')
+def expert_answer_create(request, question_id):
+    question = get_object_or_404(Expert, pk=question_id)
+    if request.method == "POST":
+        form = ExpertAnswerForm(request.POST)
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.author = request.user  # author 속성에 로그인 계정 저장
+            answer.create_date = timezone.now()
+            answer.question = question
+            answer.save()
+            print(question.id)
+            return redirect('{}#answer_{}'.format(
+                resolve_url('pybo:expert_detail', question_id=question.id), answer.id))
+    else:
+        form = ExpertAnswerForm()
+    context = {'question': question, 'form': form}
+    return render(request, 'pybo/expert_detail.html', context)
+
+# expert view end ///////////////////////////////////////
+
 
 
 def pet_create(request,question_id):
@@ -553,55 +554,9 @@ def landing_page(request):
     return render(request, 'registration/landing.html')
 
 
-
-
-
-
-
-# 1. Channel-Community
-
-def createChannel(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '1.channelCommunity/create.html')
-
-def listChannel(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '1.channelCommunity/list.html')
-
-def medicalCaseChannel(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '1.channelCommunity/medicalCase.html')
-
-def scheduleChannel(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '1.channelCommunity/schedule.html')
-
-
 # 2. group
 
-def createGroup(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '2.group/create.html')
+
 
 @login_required(login_url='common:login')
 def forumGroup(request):
@@ -622,124 +577,8 @@ def forumGroup(request):
     return render(request, '2.group/forum.html', context)
 
 
-def listGroup(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '2.group/list.html')
 
-
-# 3. board
-
-def newsBoard(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '3.board/news.html')
-
-def medicalInfoBoard(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '3.board/medicalInfo.html')
-
-def etcBoard(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '3.board/etc.html')
-
-
-# 4. chatgpt
-
-def searchChatgpt(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '4.chatgpt/search.html')
-
-def relatedInformationChatgpt(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '4.chatgpt/relatedInformation.html')
-
-def etcChatgpt(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '4.chatgpt/etc.html')
-
-
-# 5. registration
-
-def publicUserRegistration(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '5.registration/publicUser.html')
-
-def medicalUserRegistration(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '5.registration/medicalUser.html')
-
-def etcRegistration(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '5.registration/etc.html')
-
-
-# 6. ai-Check
-
-def createDataAICheck(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '6.ai-Check/createData.html')
-
-def createPHRAICheck(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '6.ai-Check/createPHR.html')
-
-def etcAICheck(request):
-    #question_list = Question.objects.order_by('-create_date')
-    #answer_list = Answer.objects.order_by('-create_date')
-    #category = Category.objects.order_by('id')
-    #context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, '6.ai-Check/etc.html')
-
-
-# 7. setting
+# 7. settig
 
 def setting(request):
     #question_list = Question.objects.order_by('-create_date')
@@ -752,18 +591,6 @@ def setting(request):
 def dangbti(request):
     
     return render(request, 'pybo/mbti.html')
-
-# def animalContest(request):
-    
-#     return render(request, 'pybo/animal_contest.html')
-
-# def animalRanking(request):
-    
-#     return render(request, 'pybo/animal_ranking.html')
-
-# def animalWrite(request):
-    
-#     return render(request, 'pybo/animal_write.html')
 
 
 
@@ -840,89 +667,6 @@ def remove(request):
     data = {}
     return JsonResponse(data)
 
-# 환자 post views.py 코드
-from django.shortcuts import render
-from .models import PatientList, Tanalyze
-
-
-def Tanalyze(request):
-    tanalyze = Tanalyze.objects.all()
-    context = {
-        'tanalyze': tanalyze
-    }
-    return JsonResponse(context)
-
-
-
-
-def patient_list(request):
-    patients = PatientList.objects.all()
-    context = {
-        'patients': patients
-    }
-    return render(request, 'patient_list.html', context)
-
-
-# 신규 환자 생성
-from django.shortcuts import render, redirect
-from .forms import PatientForm
-
-def add_patient(request):
-    if request.method == 'POST':
-        form = PatientForm(request.POST)
-        if form.is_valid():
-            patient = form.save(commit=False)
-            patient.author = request.user
-            patient.save()
-            return redirect('patient_list')  # 'patient_list'를 환자 목록 뷰의 URL 이름으로 바꾸세요
-    else:
-        form = PatientForm()
-    return render(request, 'your_template.html', {'form': form})
-
-
-
-
-
-
-
-
-# def process_image_function(img):
-#     # 이미지 처리
-#     x = cv2.Sobel(img, cv2.CV_16S, 1, 0)
-#     y = cv2.Sobel(img, cv2.CV_16S, 0, 1)
-#     absX = cv2.convertScaleAbs(x)  # uint8로 변환
-#     absY = cv2.convertScaleAbs(y)
-#     result = cv2.addWeighted(absX, 0.5, absY, 0.5, 0)
-
-#     return result
-
-
-
-# def process_image(request):
-#     # Tanalyze 모델 인스턴스 가져오기
-#     tanalyze_instance = Tanalyze.objects.all()[1]  # 예시로 첫 번째 인스턴스를 가져옴
-
-#     # 이미지 파일 읽기
-#     image = tanalyze_instance.side_sephalo  
-#     # 이미지 파일 읽기
-#     img = cv2.imread(image.path)
-#     # 이미지 처리
-#     result = process_image_function(img)
-
-#     # 결과 이미지를 저장할 필드에 할당
-#     result_image = ContentFile(cv2.imencode('.jpg', result)[1].tostring())
-
-#     # Tanalyze 모델 인스턴스 업데이트
-#     tanalyze_instance.side_sephalo_line.save('result.jpg', result_image)
-  
-#     # 결과 이미지의 URL을 변수에 할당
-#     result_image_url = tanalyze_instance.side_sephalo_line.url
-
-#     context = {'result_image_url': result_image_url}
-
-#     return render(request, '6.ai-Check/createData_line.html', context)
-
-
 
 # forum view///////////////////////
 
@@ -940,7 +684,6 @@ def forum(request):
     questions = ForumQuestion.objects.all()
     context = {'questions': questions}
     return render(request, '2.group/forum.html', context)
-
 
 @login_required(login_url='common:login')
 def create_forum_question(request):
@@ -975,8 +718,6 @@ def create_forum_question(request):
         # return redirect('pybo:forumGroup')
     return render(request, '2.group/forum.html')
 
-
-
 @login_required(login_url='common:login')
 def forum_question_delete(request, question_id):
     question = get_object_or_404(ForumQuestion, pk=question_id)
@@ -986,8 +727,6 @@ def forum_question_delete(request, question_id):
     question.delete()
     messages.success(request, '성공적으로 삭제되었습니다')
     return redirect('pybo:forumGroup')
-
-
 
 @login_required(login_url='common:login')
 def create_forum_answer(request, question_id):
@@ -1007,8 +746,6 @@ def create_forum_answer(request, question_id):
     context = {'question': question, 'form': form}
     return render(request, '2.group/forum.html', context)
 
-
-
 @login_required(login_url='common:login')
 def forum_question_vote(request, question_id):
     
@@ -1022,17 +759,6 @@ def forum_question_vote(request, question_id):
         question.save()
 
         return JsonResponse({'success': True, 'voter_count': question.voter.count(), 'voted': voted})
-
-
-
-        # return render(request, '2.group/forum.html', context)
-
-    
-    # except ForumQuestion.DoesNotExist:
-    #     return JsonResponse({'success': False, 'error': 'Question does not exist'})
-        
-
-
 
 @login_required(login_url='common:login')
 def forum_answer_modify(request, answer_id):
@@ -1052,10 +778,6 @@ def forum_answer_modify(request, answer_id):
     context = {'answer': answer, 'form': form}
     return render(request, 'pybo/answer_form.html', context)
 
-
-
-
-
 @login_required(login_url='common:login')
 def forum_answer_delete(request, answer_id):
     answer = get_object_or_404(ForumAnswer, pk=answer_id)
@@ -1065,13 +787,6 @@ def forum_answer_delete(request, answer_id):
         answer.delete()
         messages.success(request, '댓글이 성공적으로 삭제되었습니다')
     return redirect('pybo:forumGroup')
-
-
-
-
-
-
-
 
 def fetch_more_posts(request):
     last_question_id = request.GET.get('last_question_id')  # 마지막으로 로드한 질문의 ID를 가져옴
@@ -1093,6 +808,9 @@ def fetch_more_posts(request):
         ]
     }
     return render(request, '2.group/forum.html', data)
+
+
+# forum end//////////////////////////////////
 
 
 def upload_profile_img(request):
@@ -1139,9 +857,6 @@ def animalContest(request,category_name='animal_ranking'):
         question_list = question_list.annotate(num_answer=Count('answer')).order_by('-num_answer', '-create_date')
     else:
         question_list = question_list.order_by('-create_date')
-
-    
-    
 
     # 검색
     if kw:
@@ -1225,6 +940,27 @@ def train_gpt(request):
         return render(request, 'pybo/calendar.html', context)#, context)
     else:
         return render(request, 'pybo/calendar.html')#, context)
+    
+from django.contrib.auth import update_session_auth_hash
 
+# @login_required
+# def edit_profile(request):
+#     if request.method == 'POST':
+#         username = request.POST.get('username', request.user)
+#         # email = request.POST['email']
+#         # password = request.POST['password']
+        
+#         user = request.user
+#         user.username = username
+#         # user.email = email
+#         # if password:
+#         #     user.set_password(password)
+#         user.save()
 
-
+#         # 업데이트 후 세션 재인증
+#         # if password:
+#         #     update_session_auth_hash(request, user)
+        
+#         return redirect('pybo:user_profile')  # 프로필 페이지로 리디렉션
+    
+#     return render(request, 'pybo/main.html')
