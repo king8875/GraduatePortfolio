@@ -19,7 +19,6 @@ from django.db.models import Q
 from django.db.models import Count
 from .models import Post, Photo, Events
 from django.http import JsonResponse
-# import cv2
 import os
 from django.core.files.storage import default_storage
 from .models import Tanalyze
@@ -30,7 +29,6 @@ from .models import ForumAnswer
 
 from .forms import ForumQuestionForm
 from .forms import ForumAnswerForm
-from .forms import ProfileImgForm
 
 
 
@@ -329,9 +327,17 @@ def answer_vote(request, answer_id):
     return redirect('{}#answer_{}'.format(
                 resolve_url('pybo:detail', question_id=answer.question.id), answer.id))
 
+
+
+
 @login_required(login_url='common:login')
 def user_profile(request):
-    return render(request, 'common/profile_base.html')
+    question_list = Question.objects.order_by('-create_date')
+    category = Category.objects.order_by('id')
+    answer_list = Answer.objects.order_by('-create_date')
+
+    context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
+    return render(request, 'common/profile_base.html', context)
 
 @login_required(login_url='common:login')
 def user_question(request):
@@ -339,11 +345,8 @@ def user_question(request):
     category = Category.objects.order_by('id')
     context = {'category': category, 'question_list': question_list}
     print(category)
-    return render(request, 'common/profile_question.html', context)
+    return render(request, 'common/profile_base.html', context)
 
-@login_required(login_url='common:login')
-def user_comment(request):
-    return render(request, 'common/profile_comment.html')
 
 @login_required(login_url='common:login')
 def user_answer(request):
@@ -351,8 +354,11 @@ def user_answer(request):
     answer_list = Answer.objects.order_by('-create_date')
     category = Category.objects.order_by('id')
     context = {'category': category, 'question_list': question_list, 'answer_list' : answer_list}
-    #print(category)
-    return render(request, 'common/profile_answer.html', context)
+    return render(request, 'common/profile_base.html', context)
+
+@login_required(login_url='common:login')
+def user_comment(request):
+    return render(request, 'common/profile_comment.html')
 
 
 
@@ -813,17 +819,17 @@ def fetch_more_posts(request):
 # forum end//////////////////////////////////
 
 
-def upload_profile_img(request):
-    if request.method == 'POST':
-        form = ProfileImgForm(request.POST, request.FILES)
-        if form.is_valid():
-            profile_img = form.save(commit=False)
-            profile_img.author = request.user
-            profile_img.save()
-            return redirect('pybo/user_profile.html')
-    else:
-        form = ProfileImgForm()
-    return render(request, 'pybo/user_profile.html', {'form': form})
+# def upload_profile_img(request):
+#     if request.method == 'POST':
+#         form = ProfileImgForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             profile_img = form.save(commit=False)
+#             profile_img.author = request.user
+#             profile_img.save()
+#             return redirect('pybo/user_profile.html')
+#     else:
+#         form = ProfileImgForm()
+#     return render(request, 'pybo/user_profile.html', {'form': form})
 
 
 
@@ -943,24 +949,3 @@ def train_gpt(request):
     
 from django.contrib.auth import update_session_auth_hash
 
-# @login_required
-# def edit_profile(request):
-#     if request.method == 'POST':
-#         username = request.POST.get('username', request.user)
-#         # email = request.POST['email']
-#         # password = request.POST['password']
-        
-#         user = request.user
-#         user.username = username
-#         # user.email = email
-#         # if password:
-#         #     user.set_password(password)
-#         user.save()
-
-#         # 업데이트 후 세션 재인증
-#         # if password:
-#         #     update_session_auth_hash(request, user)
-        
-#         return redirect('pybo:user_profile')  # 프로필 페이지로 리디렉션
-    
-#     return render(request, 'pybo/main.html')

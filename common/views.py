@@ -1,8 +1,42 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
-from common.forms import UserForm
+from common.forms import UserForm, UserUpdateForm, ProfileUpdateForm, ProfileForm
+from django.contrib.auth.decorators import login_required
+from .models import Profile 
+from rest_framework import generics
+from django.contrib.auth.models import User
+from rest_framework import serializers
+from .serializer import UserSerializer
 
-# Create your views here.
+
+class UserProfileView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+@login_required
+def edit_profile(request):
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = Profile(user=request.user)
+        profile.save()
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('common:edit_profile')
+    else:
+        form = ProfileForm(instance=request.user.profile)
+
+    return render(request, 'common/edit_profile.html', {'form': form})
+
+
+
+
+
+
 def signup(request):
     if request.method == "POST":
         form = UserForm(request.POST)
@@ -16,10 +50,6 @@ def signup(request):
     else:
         form = UserForm()
     return render(request, 'common/signup.html', {'form': form})
-
-
-
-
 
 def landing(request):
     

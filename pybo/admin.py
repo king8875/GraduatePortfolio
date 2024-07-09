@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Question, Post, Photo, Expert, Pet, Profile_img, animal_ranking_Category, ForumQuestion, animal_ranking
+from .models import Question, Post, Photo, Expert, Pet, animal_ranking_Category, ForumQuestion, animal_ranking
 
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -18,7 +18,6 @@ admin.site.register(Expert)
 admin.site.register(ForumQuestion)
 
 
-admin.site.register(Profile_img)
 
 admin.site.register(animal_ranking_Category)
 admin.site.register(animal_ranking)

@@ -30,7 +30,7 @@
                 {% endif %}
                 <div class="question_detail_profile_con">
                     
-                    <img class="profile_img" src="https://d3j8buaepzkvqi.cloudfront.net/img/1582028088451-2.jpg">
+                    <img class="profile_img" src="{{ user.profile.image.url }}">
                     <div>
                         <div>{{ question.author.username }}</div>
                         <div>{{ question.create_date|date:"n월 j일" }}</div>
@@ -76,7 +76,7 @@
 
                 <div class="profile_con">
                     <div style="display: flex;">
-                        <img class="profile_img" src="https://d3j8buaepzkvqi.cloudfront.net/img/1582028088451-2.jpg">
+                        <img class="profile_img" src="{{ user.profile.image.url }}">
 
                         <div>
                             {{ answer.author.username }}

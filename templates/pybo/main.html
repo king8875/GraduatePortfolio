@@ -33,7 +33,13 @@
     <div class="main_profile_con">
 
       <div class="profile_img_con">
-        <img src="{% static 'img/profile_img.jpg' %}" onclick="openModal()">
+        {% if user.profile.image %}
+
+        <img class="nav_profile_img" src="{{ user.profile.image.url }}" alt="{{ user.username }}"/>
+        {% else %}
+        <img src="{% static 'img/user.png' %}" alt="Default Image" class="profile-img">
+        {% endif %}      
+      
       </div>
       
       <p class="profile_username">{{ user.username }}</p>

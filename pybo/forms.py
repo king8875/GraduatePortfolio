@@ -1,8 +1,7 @@
 from django import forms
-from pybo.models import Question, Answer, Expert, Expert_answer, Pet,Profile_img
+from pybo.models import Question, Answer, Expert, Expert_answer, Pet, ForumQuestion, ForumAnswer, animal_ranking
 from django.db import connection
-from .models import ForumQuestion
-from .models import ForumAnswer
+
 
 class QuestionForm(forms.ModelForm):
     class Meta:
@@ -90,30 +89,6 @@ class ForumAnswerForm(forms.ModelForm):
             'content': '답변내용',
         }
 
-        
-from .models import PatientList
-
-class PatientForm(forms.ModelForm):
-    class Meta:
-        model = PatientList
-        fields = ['name', 'gender', 'birthday', 'progress', 'tag']
-
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '이름'}),
-            'gender': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '성별'}),
-            'birthday': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '생년월일'}),
-            'progress': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '진행 상태'}),
-            'tag': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '태그'}),
-        }
-
-class ProfileImgForm(forms.ModelForm):
-    class Meta:
-        model = Profile_img
-        fields = ('Profile_img',)
-
-
-from .models import animal_ranking
-
 class animalForm(forms.ModelForm):
     class Meta:
         model = animal_ranking
@@ -132,3 +107,5 @@ class animalForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(animalForm, self).__init__(*args, **kwargs)
         self.fields['thumbnail'].required = False
+
+

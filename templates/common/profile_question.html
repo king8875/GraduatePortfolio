@@ -1,25 +1,22 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load pybo_filter %}
+{% load static %}
+
 <!-- Required meta tags -->
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="shortcut icon" type="image/x-icon" href="https://pybo.kr/static/img/favicon.ico">
-<!-- Bootstrap CSS -->
-<link rel="stylesheet" type="text/css" href="./user_question_files/bootstrap.min.css">
-<!-- pybo CSS -->
-<link rel="stylesheet" type="text/css" href="./user_question_files/style.css">
-<!-- Font Awesome JS -->
+<link rel="stylesheet" href="{% static 'css/setting.css' %}?after" type="text/css">
 
 
-<div class="col-md-9 col-lg-9">
-    <div class="container mt-3">
-        <div class="row">
-            <div class="col-sm-12 col-md-9 col-lg-10 p-2">
-                <div id="content" class="border-top border-secondary">
-                    <div class="content_block">
+<div class="profile_content_wrapper" style="background-color: #fafafa;">
+    
+        
+        
+                <div>
+                    <div>
 
-                        <h5 class="border-bottom pb-2 mb-3">{{ user.username }}</h5>
-                        <ul class="nav nav-tabs">
+                        <h5>{{ user.username }}</h5>
+                        <ul>
                             <li class="nav-item">
                                 <a class="nav-link " href="{% url 'pybo:user_profile' %}">기본정보</a>
                             </li>
@@ -35,37 +32,39 @@
                         </ul>
 
 
-                        <div class="btn-group my-3" role="group">
-                            <button type="button" title="" class="btn btn-sm btn-secondary so active" data-so="recent" data-original-title="최신순"><i class="fas fa-list"></i></button>
-                            <button type="button" title="" class="btn btn-sm btn-secondary so " data-so="recommend" data-original-title="추천순"><i class="fas fa-thumbs-up"></i></button>
+                        <div role="group">
+                            <button type="button" class="btn btn-sm btn-secondary so active" data-so="recent" data-original-title="최신순">
+                                <i class="fas fa-list"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-secondary so " data-so="recommend" data-original-title="추천순">
+                                <i class="fas fa-thumbs-up"></i>
+                            </button>
                         </div>
 
-                        <div class="table-responsive">
-                            <table class="table table-sm">
+                        <div>
+                            <table>
                                 <thead>
                                 <tr class="text-center" style="background-color:#fafafa">
                                     <th>번호</th>
-                                    <th style="width:55%">제 목</th>
+                                    <th style="width:55%">제목</th>
                                     <th>추천</th>
                                     <th>구분</th>
                                     <th>날짜</th>
                                 </tr>
                                 </thead>
-                                <!-- {% for cat in category %}
-                                    {{cat}}</td>
-                                {% endfor %} -->
+
                                 <tbody>
                                 {% if question_list %}
                                 {% for question in question_list %}
                                 {% if request.user == question.author %}
-                                <!-- quesx cate o -->
-                                <tr class="text-center">
+                                <tr>
                                     <td>
                                         <!-- 번호 = 전체건수 - 시작인덱스 - 현재인덱스 + 1 -->
                                         {{ question.id }}
                                     </td>
-                                    <td class="text-start">
-                                        <a href="{% url 'pybo:detail' question.id %}">{{ question.subject}}</a>
+                                    <td class="content_text">
+                                        <a href="{% url 'pybo:detail' question.id %}">{{ question.subject }}</a>
+
 
 
                                     <td>{{question.voter.count}}</td>
@@ -113,9 +112,9 @@
                         </form>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
+            
+        
+    
 </div>
 
 <!-- 자바스크립트 Start -->

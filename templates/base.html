@@ -130,8 +130,13 @@
             <ul>
               <li>
                 <div class="nav_profile_wrapper">
-  
-                  <img class="nav_profile_img" src="{%static 'img/user.png' %}" />
+                  {% if user.profile.image %}
+
+                  <img class="nav_profile_img" src="{{ user.profile.image.url }}" alt="{{ user.username }}"/>
+                  {% else %}
+                  <img src="{% static 'img/user.png' %}" alt="Default Image" class="profile-img">
+                  {% endif %}
+
                   <div class="user_name">
                     {% if request.user.is_authenticated %}
                     <div class="user_name_content">
