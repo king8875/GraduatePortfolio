@@ -186,13 +186,6 @@
 
 
 
-
-
-
-
-
-
-
     <script type="text/javascript" style="user-select: auto;">
         $(document).ready(function () {
             $(".page-link").on('click', function () {
@@ -215,6 +208,9 @@
             $('.so').tooltip();
             $('[data-toggle="popover"]').popover();
 
+            $('.content_btn').click(function () {
+                $('.setting_content_con').toggleClass('visible');
+            });
             $('.content_btn').click(function () {
                 $('.setting_content_con').toggleClass('visible');
             });

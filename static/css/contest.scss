@@ -13,7 +13,7 @@ html {
 body {
     padding: 0;
     margin: 0;
-    
+    overflow-x: hidden;
 }
 .contest_wrapper {
     background-color: #ffffff;
@@ -52,24 +52,81 @@ body {
     color: #fff;
     border-radius: 12px;
 }
-
+.contest_list_con {
+    background-color: rgb(255, 255, 255);
+    padding: 10px;
+    border-radius: 20px;
+    box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
+}
 .contest_list {
-    background-color: #bfaeff;
     display: flex;
+    justify-content: space-around;
+    align-items: center;
     
 }
 .contest_item_con_ul {
+    height: 320px;
     display: flex;
+    background-color: #bfaeff;
+    border-radius: 12px;
+
     
 }
 .contest_item_con {
     display: flex;
-    background-color: aqua;
+    flex-direction: column;
     margin-bottom: 20px;
+    .contest_thumbnail {
+        width: 250px;
+        height: 250px;
+        border-radius: 12px;
+    }
 }
 
 .contest_page_ul {
     width: 100%;
     display: flex;
     justify-content: center;
+    padding: 20px;
+
+    li {
+        width: 100px;
+    }
+}
+
+.contest_img_con {
+    position: relative;
+    
+    span {
+        color: #fff;
+    }
+
+}
+.contest_vote_con {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background-color: #5429FF;
+    padding: 10px;
+    border-radius: 12px 0 12px 0;
+}
+.contest_profile_img {
+    width: 45px;
+    height: 45px;
+    border-radius: 9999px;
+    margin-right: 20px;
+}
+.contest_item_profile_con {
+    display: flex;
+    padding: 10px;
+    color: #fff;
+}
+
+.contest_profile_text {
+    p {
+        font-weight: 500;
+    }
+    span {
+        font-size: 12px;
+    }
 }

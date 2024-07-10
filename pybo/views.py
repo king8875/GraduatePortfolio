@@ -1,9 +1,14 @@
 from django.shortcuts import render, get_object_or_404, redirect, resolve_url
-from .models import Question, Answer, Category, Expert_Category, Expert, Expert_answer, Pet, animal_ranking_Category
+from .models import (
+    Question, Answer, Category, Expert_Category, Expert,
+    Expert_answer, Pet, animal_ranking_Category, Post, 
+    Photo, Events,animal_ranking, animal_ranking_Category,
+    ForumQuestion,ForumAnswer
+)
+from .forms import QuestionForm , AnswerForm, ExpertForm, ExpertAnswerForm,PetForm, ForumQuestionForm, ForumAnswerForm, animalForm
+
 from django.utils import timezone
-from django.http import HttpResponse
-from .forms import QuestionForm , AnswerForm, ExpertForm, ExpertAnswerForm,PetForm
-from django.http import HttpResponseNotAllowed
+from django.http import HttpResponse, HttpResponseNotAllowed
 from django.core.paginator import Paginator  
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
@@ -17,18 +22,12 @@ from django.contrib.auth.forms import (
 )
 from django.db.models import Q
 from django.db.models import Count
-from .models import Post, Photo, Events
 from django.http import JsonResponse
 import os
 from django.core.files.storage import default_storage
-from .models import Tanalyze
 from django.core.files import File
 from django.core.files.base import ContentFile
-from .models import ForumQuestion
-from .models import ForumAnswer
 
-from .forms import ForumQuestionForm
-from .forms import ForumAnswerForm
 
 
 
@@ -399,7 +398,7 @@ def expert(request, category_name='expert'):
         ).distinct()
 
     # 페이징처리
-    paginator = Paginator(question_list, 8)  # 페이지당 10개식 보여주기
+    paginator = Paginator(question_list, 8)  # 페이지당 8개식 보여주기
     page_obj = paginator.get_page(page)
     max_index = len(paginator.page_range)
 
@@ -819,31 +818,16 @@ def fetch_more_posts(request):
 # forum end//////////////////////////////////
 
 
-# def upload_profile_img(request):
-#     if request.method == 'POST':
-#         form = ProfileImgForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             profile_img = form.save(commit=False)
-#             profile_img.author = request.user
-#             profile_img.save()
-#             return redirect('pybo/user_profile.html')
-#     else:
-#         form = ProfileImgForm()
-#     return render(request, 'pybo/user_profile.html', {'form': form})
 
 
 
 
-from .models import animal_ranking
-from .models import animal_ranking_Category
-from .forms import animalForm
 
+# animal contest view
 
 def animalContest(request,category_name='animal_ranking'):
     
-    '''
-    pybo 목록 출력
-    '''
+   
     # 입력 파라미터
     page = request.GET.get('page', '1')  # 페이지
     kw = request.GET.get('kw', '')  # 검색어
@@ -875,7 +859,7 @@ def animalContest(request,category_name='animal_ranking'):
         ).distinct()
 
     # 페이징처리
-    paginator = Paginator(question_list, 9)  # 페이지당 10개식 보여주기
+    paginator = Paginator(question_list, 4)  # 페이지당 4개식 보여주기
     page_obj = paginator.get_page(page)
     max_index = len(paginator.page_range)
 
@@ -889,11 +873,8 @@ def animalContest(request,category_name='animal_ranking'):
 
 @login_required(login_url='common:login')
 def animalWrite(request,category_name='animal_ranking'):
-    """
-    pybo 질문등록
-    """
+   
     category = animal_ranking_Category.objects.get(name=category_name)
-    print(category)
     aniaml = animal_ranking.objects.all
     form = animalForm(request.POST, request.FILES)
     if request.method == 'POST':
@@ -906,27 +887,44 @@ def animalWrite(request,category_name='animal_ranking'):
             aniaml.category = category  
            
             aniaml.save()
-           
-            #return redirect(category)
-            #return redirect('pybo:expert_detail')
-            #expert = get_object_or_404(Question, pk=expert_id)
+        
             context = {'aniaml': aniaml, 'form': form}
-            print("123123")
             return redirect('pybo:animalcontest', category_name='animal_ranking')
         else:
             print(form.errors)
     else:  # request.method == 'GET'
         form = animalForm()
-        print("gdgd")
     context = {'form': form, 'category': category}
     return render(request, 'pybo/question_form.html', context)
+
+
 
 @login_required(login_url='common:login')
 def animal_vote(request, question_id):
     question = get_object_or_404(animal_ranking, pk=question_id)
+
+    if request.user not in question.voter.all():
+        question.voter.add(request.user)
+        question.voter_count += 1  # 추천수 증가
+        question.save()
     
     question.voter.add(request.user)
     return redirect('pybo:animalcontest', category_name='animal_ranking')
+
+
+def top_animal_ranking(request):
+    top_ranking = animal_ranking.objects.order_by('-voter_count').first()  # 추천수가 가장 높은 항목 조회
+    context = {'top_ranking': top_ranking}
+    return render(request, 'pybo/animal_contest.html', context)
+
+
+
+
+
+
+
+
+
 
 
 @login_required(login_url='common:login')

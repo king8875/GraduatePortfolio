@@ -9,8 +9,6 @@ app_name = 'pybo'
 urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
-    # path('edit_profile/', views.edit_profile, name='edit_profile'),
-
     #path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     #path('password_reset_done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('password_reset_confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
@@ -42,7 +40,6 @@ urlpatterns = [
     path('profile/comment/', views.user_comment, name='user_comment'),
     path('password_reset/', views.UserPasswordResetView.as_view(), name="password_reset"),
     path('password_reset/done/', views.UserPasswordResetDoneView.as_view(), name="password_reset_done"),
-    # path('alexander/', views.index2, name='index2'),
     path('question/craete/<str:category_name>/', views.question_create, name='question_create'),
     path('question/list/', views.index, name='index'),
     path('question/list/<str:category_name>/', views.index, name='index'),
@@ -52,23 +49,27 @@ urlpatterns = [
     path('expert/craete/<str:category_name>/', views.expert_create, name='expert_create'),
     path('create/<int:question_id>', views.pet_create, name='pet_create'),
     path('dangbti/', views.dangbti, name='dangbti'),
-    #path('animal/contest/', views.animalContest, name='animal_contest'),
-    #path('animal/ranking/', views.animalRanking, name='animal_ranking'),
-    #path('animal/write/', views.animalWrite, name='animal_write'),
-    path('registration/landing/', views.landing_page, name='landing_page'),
-    path('tanalyze/', views.Tanalyze, name='Tanalyze'),
 
+
+    path('animal/contest/', views.animalContest, name='animal_contest'),
+    # path('animal/ranking/', views.animalRanking, name='animal_ranking'),
+    path('animal/write/', views.animalWrite, name='animal_write'),
     path('animal/contest/<str:category_name>/', views.animalContest, name='animalcontest'),
     #path('animal/ranking/', views.animalRanking, name='animal_ranking'),
     path('animal/write/<str:category_name>', views.animalWrite, name='animal_write'),
     path('animal/vote/<int:question_id>/', views.animal_vote, name='animal_vote'),
+
     path('train_gpt/', views.train_gpt, name='train_gpt'),
-    
+    path('registration/landing/', views.landing_page, name='landing_page'),
+
+
+    # path('tanalyze/', views.Tanalyze, name='Tanalyze'),
 
 
 
 
-    # 2. group
+
+    # group
     path('group/forum/', views.forumGroup, name='forumGroup'),
     
     path('group/create_forum_question/', views.create_forum_question, name='create_forum_question'),
@@ -76,20 +77,14 @@ urlpatterns = [
     path('group/fetch_more_posts/', views.fetch_more_posts, name='fetch_more_posts'),
     path('group/create_forum_answer/<int:question_id>/', views.create_forum_answer, name='create_forum_answer'),
     path('forum_answer/modify/<int:answer_id>/', views.forum_answer_modify, name='forum_answer_modify'),
-
     path('group/forum_question_vote/<int:question_id>/', views.forum_question_vote, name='forum_question_vote'),
     path('forum_answer/delete/<int:answer_id>/', views.forum_answer_delete, name='forum_answer_delete'),
     path('forum_question_delete/<int:question_id>/', views.forum_question_delete, name='forum_question_delete'),
 
 
 
-
-
-    
-    # 7. setting
+    # setting
     path('setting/', views.setting, name='setting'),
-
-
     path('cal/',views.calendar, name='calendar'),
     path('all_events/',views.all_events, name='all_events'),
     path('add_event/',views.add_event, name='add_event'),

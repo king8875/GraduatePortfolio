@@ -9,87 +9,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contest</title>
-    <link rel="stylesheet" href="{% static 'css/contest.css' %}?after" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/contest.css' %}" type="text/css">
 
 </head>
 <body>
 
     <div class="contest_wrapper">
+
         <h5 class="contest_title_con">
             <p class="contest_title">Dang 콘테스트</p>
-            <a class="contest_submit_btn" href="{% url 'pybo:animal_write' 'animal_ranking' %}">글 등록하기</a>
+            <a class="contest_submit_btn" href="{% url 'pybo:animal_write' %}">글 등록하기</a>
         </h5>  
+
+        <div class="contest_ranking_con">
+            <h1>Top Animal Ranking</h1>
+    {% if top_ranking %}
+        <p>Name: {{ top_ranking.author }}</p>
+        <p>Description: {{ top_ranking.author }}</p>
+        <p>Vote Count: {{ top_ranking.voter_count }}</p>
+    {% else %}
+        <p>No ranking available.</p>
+    {% endif %}
+        </div>
         
-        <div class="contest_list">+
 
-            {% if question_list %}
-            {% for question in question_list %}
-                <div class="contest_item_con_ul">
+        <div class="contest_list_con">
+            <div class="contest_list">
 
-                    <div class="contest_item_con">
-                        {% if question.thumbnail %}
-                        <img src="{{ question.thumbnail.url }}" alt="{{question.subject}}" width = "250" height="225">
-                        {% endif %}
-                        
-                        <p>{{ question.author.username }}</p>
-                        <div>
-                            <div>
-                                <div>
-                                    <a href="javascript:void(0)" data-uri="{% url 'pybo:animal_vote' question.id  %}"> 
-                                        추천
+                {% if question_list %}
+                {% for question in question_list %}
+                    <div class="contest_item_con_ul">
+    
+                        <div class="contest_item_con">
+                            {% if question.thumbnail %}
+                            <div class="contest_img_con">
+                                <img class="contest_thumbnail" src="{{ question.thumbnail.url }}" alt="{{question.subject}}">
+                                <div class="contest_vote_con">
+                                    <a class="recommend" href="javascript:void(0)" data-uri="{% url 'pybo:animal_vote' question.id  %}"> 
+                                        <i style="color: #fff;" class="fa-regular fa-heart"></i>
                                         <span>{{question.voter.count}}</span>
                                     </a>
                                 </div>
                             </div>
-                            <small>{{ question.create_date }}</small>
+                            {% endif %}
+                            <div class="contest_item_profile_con">
+                                {% if user.profile.image %}
+                                <img class="contest_profile_img" src="{{ user.profile.image.url }}" alt="{{ user.username }}"/>
+                                {% else %}
+                                <img src="{% static 'img/user.png' %}" alt="Default Image" class="profile-img">
+                                {% endif %}
+                                <div class="contest_profile_text">
+                                    <p>{{ question.author.username }}</p>
+                                    <span>{{ question.create_date }}</span>
+                                </div>
+                               
+                            </div>
+                         
+
                         </div>
                     </div>
+                {% endfor %}
+                {% else %}
+                {% endif %}
+            </div>
+            <!-- 페이징처리 시작 -->
+            <ul class="contest_page_ul">
+                <!-- 이전페이지 -->
+                {% if question_list.has_previous %}
+                <li>
+                    <a href="?page={{ question_list.previous_page_number }}">이전</a>
+                </li>
+                {% else %}
+                <li class="disabled">
+                    <a tabindex="-1" aria-disabled="true" href="#">이전</a>
+                </li>
+                {% endif %}
 
-                </div>
-            {% endfor %}
-            {% else %}
-            {% endif %}
+                <!-- 페이지리스트 -->
+                {% for page_number in question_list.paginator.page_range %}
+                {% if page_number >= question_list.number|add:-5 and page_number <= question_list.number|add:5 %}
+                {% if page_number == question_list.number %}
+                <li class="active" aria-current="page">
+                    <a href="?page={{ page_number }}">{{ page_number }}</a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="?page={{ page_number }}">{{ page_number }}</a>
+                </li>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+                <!-- 다음페이지 -->
+                {% if question_list.has_next %}
+                <l>
+                    <a href="?page={{ question_list.next_page_number }}">다음</a>
+                </li>
+                {% else %}
+                <li class="disabled">
+                    <a tabindex="-1" aria-disabled="true" href="#">다음</a>
+                </li>
+                {% endif %}
+            </ul>
+            <!-- 페이징처리 끝 -->
         </div>
-
-
-        <!-- 페이징처리 시작 -->
-        <ul class="contest_page_ul">
-            <!-- 이전페이지 -->
-            {% if question_list.has_previous %}
-            <li>
-                <a href="?page={{ question_list.previous_page_number }}">이전</a>
-            </li>
-            {% else %}
-            <li class="disabled">
-                <a tabindex="-1" aria-disabled="true" href="#">이전</a>
-            </li>
-            {% endif %}
-            <!-- 페이지리스트 -->
-            {% for page_number in question_list.paginator.page_range %}
-            {% if page_number >= question_list.number|add:-5 and page_number <= question_list.number|add:5 %}
-            {% if page_number == question_list.number %}
-            <li class="active" aria-current="page">
-                <a href="?page={{ page_number }}">{{ page_number }}</a>
-            </li>
-            {% else %}
-            <li>
-                <a href="?page={{ page_number }}">{{ page_number }}</a>
-            </li>
-            {% endif %}
-            {% endif %}
-            {% endfor %}
-            <!-- 다음페이지 -->
-            {% if question_list.has_next %}
-            <l>
-                <a href="?page={{ question_list.next_page_number }}">다음</a>
-            </li>
-            {% else %}
-            <li class="disabled">
-                <a tabindex="-1" aria-disabled="true" href="#">다음</a>
-            </li>
-            {% endif %}
-        </ul>
-        <!-- 페이징처리 끝 -->
+      
         
     </div>
     

@@ -198,8 +198,8 @@ class animal_ranking(models.Model):
     category = models.ForeignKey(animal_ranking_Category, on_delete=models.CASCADE, related_name='animal_ranking_category')
     pet = models.ForeignKey(Pet2, on_delete=models.CASCADE, null=True, related_name='pet2')
     thumbnail = models.ImageField(upload_to='photos/%Y/%m/%d/',null=True,blank=True) 
-    voter = models.ManyToManyField(User, related_name='voter_animal_question')
-    voter_count = models.IntegerField(default=0, null=True,)
+    # voter = models.ManyToManyField(User, related_name='voter_animal_question')
+    voter_count = models.PositiveIntegerField(default=0, null=True)
 
     def __str__(self):
         return self.subject      ###models.py####
