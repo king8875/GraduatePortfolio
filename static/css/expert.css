@@ -220,7 +220,6 @@ input[type=file] {
 .profile_btn_con a {
   padding: 10px;
   color: #fff;
-  background-color: #000000;
   border-radius: 12px;
 }
 .profile_btn_con a:nth-child(1) {

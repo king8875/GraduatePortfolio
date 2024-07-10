@@ -1,57 +1,69 @@
 {% extends 'base.html' %}
 {% load pybo_filter %}
+{% load static %}
 
 {% block content %}
-<div class="question_form_wrapper">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/expert.css' %}?after" type="text/css">
 
-    <h5 class="form_title">{{ author.username }} 님이 작성중입니다!</h5>
+</head>
+<body>
+    <div class="question_form_wrapper">
 
-
-    <div class="question_form_content">
-
-        <form  method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-
-            <div class="form-group">
-                <div class="label_tag">
-                    {{ form.subject.label_tag }} 
-                </div>
-                <div class="input_box">
-                    {{ form.subject }}
-
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="label_tag">
-                    {{ form.content.label_tag }} 
-                </div>
-                <div class="input_box">
-                    {{ form.content }}
-                </div>
-                
-            </div>
-            <div class="form-group">
-                
+        <h5 class="form_title">{{ author.username }} 님이 작성중입니다!</h5>
+    
+        <div class="question_form_content">
+    
+            <form  method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+    
+                <div class="form-group">
                     <div class="label_tag">
-                        {{ form.thumbnail.label_tag }} 
-
+                        {{ form.subject.label_tag }} 
                     </div>
-                    <div class="filetype">
-                        {{ form.thumbnail }}
-
+                    <div class="input_box">
+                        {{ form.subject }}
+    
                     </div>
+                </div>
+                <div class="form-group">
+                    <div class="label_tag">
+                        {{ form.content.label_tag }} 
+                    </div>
+                    <div class="input_box">
+                        {{ form.content }}
+                    </div>
+                    
+                </div>
+                <div class="form-group">
+                    
+                        <div class="label_tag">
+                            {{ form.thumbnail.label_tag }} 
+    
+                        </div>
+                        <div class="filetype">
+                            {{ form.thumbnail }}
+    
+                        </div>
+                
+                </div>
+    
+    
+                <!-- {{ form.as_p }} -->
+           
+                <button class="question_form_submit_btn" type="submit">
+                    저장하기
+                </button>
+            </form>
+    
             
-            </div>
-
-
-            <!-- {{ form.as_p }} -->
-       
-            <button class="question_form_submit_btn" type="submit">
-                저장하기
-            </button>
-        </form>
-
-        
+        </div>
     </div>
-</div>
-{% endblock %}
+    {% endblock %}
+</body>
+</html>

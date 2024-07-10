@@ -1,168 +1,183 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="question_detail_wrapper">
+{% load static %}
 
-    <div class="question_detail_con">
-        <!-- message 표시 -->
-        {% if messages %}
-        <div role="alert">
-            {% for message in messages %}
-            <strong>{{ message.tags }}</strong>
-            <ul>
-                <li>{{ message.message }}</li>
-            </ul>
-            {% endfor %}
-        </div>
-        {% endif %}
-        <!-- 질문 -->
-        <h2 class="question_detail_subject_con">
-            <div class="subject">
-                {{ question.subject }}
-            </div>
-    
-            <!-- <div class="modify_date">
-                {{ question.modify_date|date:"n월 j일" }}
-            </div> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/expert.css' %}?after" type="text/css">
 
-            <div class="modify_date">
-                {% if question.modify_date %}
+</head>
+<body>
+    <div class="question_detail_wrapper">
 
-                {% endif %}
-                <div class="question_detail_profile_con">
-                    
-                    <img class="profile_img" src="{{ user.profile.image.url }}">
-                    <div>
-                        <div>{{ question.author.username }}</div>
-                        <div>{{ question.create_date|date:"n월 j일" }}</div>
-                    </div>
-                    
-                    <div class="profile_btn_con">
-                        {% if request.user == question.author %}
-                        <a href="{% url 'pybo:expert_modify' question.id  %}">rewrite</a>
-                        <a href="javascript:void(0)" class="delete" data-uri="{% url 'pybo:expert_delete' question.id  %}">delete</a>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            
-        </h2>
-
-        <div>
-            <div class="card_body">
-                <div class="card_body_content">
-                    <div class="card_content">{{ question.content }}</div>
-                    <img src="{{ question.thumbnail.url }}" alt="{{question.subject}}">
-                </div>
-            </div>
-        </div>
-
-        
-        <!-- 답변 -->
-
-        <!-- 이미지 -->
-        <!-- {% if photo %} -->
-        <!-- {{photo.image.url}} -->
-
-        {% endif %}
-        <!-- {{photo.image}} -->
-        {% for photo in post.photo_set.all%}
-        {% endfor %}
-        <h5 class="comment_count_con"> {{question.expert_answers.count}} comment</h5>
-        
-        {% for answer in question.expert_answers.all %}
-        <!-- <a id="answer_{{ answer.id }}"></a> -->
-        <div>
-            <div class="comment_con">
-
-                <div class="profile_con">
-                    <div style="display: flex;">
-                        <img class="profile_img" src="{{ user.profile.image.url }}">
-
-                        <div>
-                            {{ answer.author.username }}
-                    
-                                <div class="profile_date">
-                                    {% if answer.modify_date %}
-                                    <div>
-                                        <div>(수정됨)</div>
-                                    </div>
-                                    {% endif %}
-                                    <div>
-                                        <div>{{ answer.create_date|date:"n월 j일" }}</div>
-                                    </div>
-                                </div>
-                        </div>
-                    </div>
-                 
-                    <div>
-                        {% if request.user == answer.author %}
-                        <a href="{% url 'pybo:expert_answer_modify' answer.id  %}"
-                            class="btn btn-sm btn-outline-secondary">수정</a>
-                        <a href="#" class="delete btn btn-sm btn-outline-secondary "
-                            data-uri="{% url 'pybo:expert_answer_delete' answer.id  %}">삭제</a>
-                        {% endif %}
-                    </div>
-                </div>
-                
-                <div class="comment_box">
-                    {{ answer.content }}
-                </div>
-
-              
-
-            </div>
-        </div>
-        {% endfor %}
-        <!-- 답변 등록 -->
-        <form action="{% url 'pybo:expert_answer_create' question.id %}" method="post" class="my-3">
-            {% csrf_token %}
-            <!-- 오류표시 Start -->
-            {% if form.errors %}
-            <div class="alert alert-danger" role="alert">
-                {% for field in form %}
-                {% if field.errors %}
-                <div>
-                    <strong>{{ field.label }}</strong>
-                    {{ field.errors }}
-                </div>
-                {% endif %}
+        <div class="question_detail_con">
+            <!-- message 표시 -->
+            {% if messages %}
+            <div role="alert">
+                {% for message in messages %}
+                <strong>{{ message.tags }}</strong>
+                <ul>
+                    <li>{{ message.message }}</li>
+                </ul>
                 {% endfor %}
             </div>
             {% endif %}
-            <!-- 오류표시 End -->
-            <div class="comment_input_con">
-                <label for="content" class="form-label">Comment</label>
-                <textarea {% if not user.is_authenticated %}disabled{% endif %} name="content" id="content" rows="5"></textarea>
+            <!-- 질문 -->
+            <h2 class="question_detail_subject_con">
+                <div class="subject">
+                    {{ question.subject }}
+                </div>
+        
+                <!-- <div class="modify_date">
+                    {{ question.modify_date|date:"n월 j일" }}
+                </div> -->
+    
+                <div class="modify_date">
+                    {% if question.modify_date %}
+    
+                    {% endif %}
+                    <div class="question_detail_profile_con">
+                        
+                        <img class="profile_img" src="{{ user.profile.image.url }}">
+                        <div>
+                            <div>{{ question.author.username }}</div>
+                            <div>{{ question.create_date|date:"n월 j일" }}</div>
+                        </div>
+                        
+                        <div class="profile_btn_con">
+                            {% if request.user == question.author %}
+                            <a href="{% url 'pybo:expert_modify' question.id  %}">rewrite</a>
+                            <a href="javascript:void(0)" class="delete" data-uri="{% url 'pybo:expert_delete' question.id  %}">delete</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+            </h2>
+    
+            <div>
+                <div class="card_body">
+                    <div class="card_body_content">
+                        <div class="card_content">{{ question.content }}</div>
+                        <img src="{{ question.thumbnail.url }}" alt="{{question.subject}}">
+                    </div>
+                </div>
             </div>
-            <input type="submit" value="답변등록" class="btn btn-primary"
-                style="padding:8px; color: white; background-color: #5429FF; border: none; float: right; width: 100px;">
-        </form>
+    
+            
+            <!-- 답변 -->
+    
+            <!-- 이미지 -->
+            <!-- {% if photo %} -->
+            <!-- {{photo.image.url}} -->
+    
+            {% endif %}
+            <!-- {{photo.image}} -->
+            {% for photo in post.photo_set.all%}
+            {% endfor %}
+            <h5 class="comment_count_con"> {{question.expert_answers.count}} comment</h5>
+            
+            {% for answer in question.expert_answers.all %}
+            <!-- <a id="answer_{{ answer.id }}"></a> -->
+            <div>
+                <div class="comment_con">
+    
+                    <div class="profile_con">
+                        <div style="display: flex;">
+                            <img class="profile_img" src="{{ user.profile.image.url }}">
+    
+                            <div>
+                                {{ answer.author.username }}
+                        
+                                    <div class="profile_date">
+                                        {% if answer.modify_date %}
+                                        <div>
+                                            <div>(수정됨)</div>
+                                        </div>
+                                        {% endif %}
+                                        <div>
+                                            <div>{{ answer.create_date|date:"n월 j일" }}</div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                     
+                        <div>
+                            {% if request.user == answer.author %}
+                            <a href="{% url 'pybo:expert_answer_modify' answer.id  %}"
+                                class="btn btn-sm btn-outline-secondary">수정</a>
+                            <a href="#" class="delete btn btn-sm btn-outline-secondary "
+                                data-uri="{% url 'pybo:expert_answer_delete' answer.id  %}">삭제</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="comment_box">
+                        {{ answer.content }}
+                    </div>
+    
+                  
+    
+                </div>
+            </div>
+            {% endfor %}
+            <!-- 답변 등록 -->
+            <form action="{% url 'pybo:expert_answer_create' question.id %}" method="post" class="my-3">
+                {% csrf_token %}
+                <!-- 오류표시 Start -->
+                {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {% for field in form %}
+                    {% if field.errors %}
+                    <div>
+                        <strong>{{ field.label }}</strong>
+                        {{ field.errors }}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <!-- 오류표시 End -->
+                <div class="comment_input_con">
+                    <label for="content" class="form-label">Comment</label>
+                    <textarea {% if not user.is_authenticated %}disabled{% endif %} name="content" id="content" rows="5"></textarea>
+                </div>
+                <input type="submit" value="답변등록" class="btn btn-primary"
+                    style="padding:8px; color: white; background-color: #5429FF; border: none; float: right; width: 100px;">
+            </form>
+        </div>
     </div>
-</div>
-
-
-{% endblock %}
-{% block script %}
-<script type='text/javascript'>
-    const delete_elements = document.getElementsByClassName("delete");
-    Array.from(delete_elements).forEach(function (element) {
-        element.addEventListener('click', function () {
-            if (confirm("정말로 삭제하시겠습니까?")) {
-                location.href = this.dataset.uri;
-            };
+    
+    
+    {% endblock %}
+    {% block script %}
+    <script type='text/javascript'>
+        const delete_elements = document.getElementsByClassName("delete");
+        Array.from(delete_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                if (confirm("정말로 삭제하시겠습니까?")) {
+                    location.href = this.dataset.uri;
+                };
+            });
         });
-    });
-    const recommend_elements = document.getElementsByClassName("recommend");
-    Array.from(recommend_elements).forEach(function (element) {
-        element.addEventListener('click', function () {
-            if (confirm("정말로 추천하시겠습니까?")) {
-                location.href = this.dataset.uri;
-            };
+        const recommend_elements = document.getElementsByClassName("recommend");
+        Array.from(recommend_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                if (confirm("정말로 추천하시겠습니까?")) {
+                    location.href = this.dataset.uri;
+                };
+            });
         });
-    });
+    
+    
+    
+    </script>
+    
+    {% endblock %}
+</body>
+</html>
 
-
-
-</script>
-
-{% endblock %}

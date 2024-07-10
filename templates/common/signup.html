@@ -12,34 +12,29 @@
 
 <body>
   <div>
-    <h3>Dog And Cat</h3>
+    <h3>Dog And Ca!!t</h3>
     <h3>Please fill your detail to access your account</h3>
   </div>
   <div>
 
     <div>
       <form method="post" action="{% url 'common:signup' %}">
-
+        {% csrf_token %}
+        {% include "form_errors.html" %}
         <fieldset>
 
-          {% csrf_token %}
-          {% include "form_errors.html" %}
+         
           <div>
+
             <div>
-
-              <label for="id_first_name">Name</label>
-
+              <label for="id_first_name">User Name</label>
               <div>
                 <input type="text" name="username" id="username" value="{{ form.username.value|default_if_none:'' }}">
               </div>
             </div>
 
             <div>
-
-              <label for="id_email">
-                E-mail
-              </label>
-
+              <label for="id_email">E-mail</label>
               <div>
                 <input type="text" class="form-control" name="email" id="email"
                   value="{{ form.email.value|default_if_none:'' }}">
@@ -50,7 +45,6 @@
               <div>
                 <div>
                   <label for="id_password1">Password</label>
-
                   <div>
                     <input type="password" name="password1" id="password1"
                       value="{{ form.password1.value|default_if_none:'' }}">
@@ -59,11 +53,9 @@
               </div>
               <div>
                 <div id="div_id_password2">
-
                   <label for="id_password2" class="control-label  requiredField">
                     Verify password
                   </label>
-
                   <div>
                     <input type="password" class="form-control" name="password2" id="password2"
                       value="{{ form.password2.value|default_if_none:'' }}">

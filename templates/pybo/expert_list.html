@@ -3,95 +3,107 @@
 {% block content %}
 {% load static %}
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExpertList</title>
+    <link rel="stylesheet" href="{% static 'css/expert.css' %}?after" type="text/css">
 
-<div class="expert_wrapper">
-    <div class="content_block">
-
-        <div class="expert_top_con">
-            <div>Expert Column</div>
-            <a href="{% url 'pybo:expert_create' category.name %}" class="expert_submit_btn">글 등록하기</a>
-        </div>
-            <div class="expert_content">
-
-                {% if question_list %}
-                {% for question in question_list %}
-                <div class="expert_card">
-                    {% if question.thumbnail %}
-                    <div class="expert_img_con">
-                        <a href="{% url 'pybo:expert_detail' question.id %}">
-                            <img src="{{ question.thumbnail.url }}" alt="{{question.subject}}" class="img-fluid">
-                        </a>
-                    </div>
-                  
-                    {% endif %}
-                    <div class="expert_text_con">
-                        
-                                <!-- 제목 -->
-                                <div class="expert_subject">
-                                    <a href="{% url 'pybo:expert_detail' question.id %}">{{ question.subject }}</a>
-                                </div>
-                                <!-- 작성자 -->
-                                <div class="expert_username">
-                                    <a>
-                                        <span>{{ question.author.username }}</span>
-                                    </a>
-                                </div>
-                        
-                    </div> 
-
-                </div>
-                {% endfor %}
-                {% else %}
-                <tr>
-                    <td colspan="4">칼럼이 없습니다.</td>
-                </tr>
-                {% endif %}
+</head>
+<body>
+    <div class="expert_wrapper">
+        <div class="content_block">
+    
+            <div class="expert_top_con">
+                <div>Expert Column</div>
+                <a href="{% url 'pybo:expert_create' category.name %}" class="expert_submit_btn">글 등록하기</a>
             </div>
-        
-
-
-
-
-        <!-- 페이징처리 시작 -->
-        <ul class="page_btn">
-            <!-- 이전페이지 -->
-            {% if question_list.has_previous %}
-            <li class="page_item">
-                <a href="?page={{ question_list.previous_page_number }}">이전</a>
-            </li>
-            {% else %}
-            <li class="page_item disabled">
-                <a tabindex="-1" aria-disabled="true" href="#">이전</a>
-            </li>
-            {% endif %}
-            <!-- 페이지리스트 -->
-            {% for page_number in question_list.paginator.page_range %}
-            {% if page_number >= question_list.number|add:-5 and page_number <= question_list.number|add:5 %} 
-            {% if page_number == question_list.number %} 
-                <li class="page_item active" aria-current="page">
-                <a  href="?page={{ page_number }}">{{ page_number }}</a>
-                </li>
-                {% else %}
+                <div class="expert_content">
+    
+                    {% if question_list %}
+                    {% for question in question_list %}
+                    <div class="expert_card">
+                        {% if question.thumbnail %}
+                        <div class="expert_img_con">
+                            <a href="{% url 'pybo:expert_detail' question.id %}">
+                                <img src="{{ question.thumbnail.url }}" alt="{{question.subject}}" class="img-fluid">
+                            </a>
+                        </div>
+                      
+                        {% endif %}
+                        <div class="expert_text_con">
+                            
+                                    <!-- 제목 -->
+                                    <div class="expert_subject">
+                                        <a href="{% url 'pybo:expert_detail' question.id %}">{{ question.subject }}</a>
+                                    </div>
+                                    <!-- 작성자 -->
+                                    <div class="expert_username">
+                                        <a>
+                                            <span>{{ question.author.username }}</span>
+                                        </a>
+                                    </div>
+                            
+                        </div> 
+    
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="4">칼럼이 없습니다.</td>
+                    </tr>
+                    {% endif %}
+                </div>
+            
+    
+    
+    
+    
+            <!-- 페이징처리 시작 -->
+            <ul class="page_btn">
+                <!-- 이전페이지 -->
+                {% if question_list.has_previous %}
                 <li class="page_item">
-                    <a  href="?page={{ page_number }}">{{ page_number }}</a>
-                </li>
-                {% endif %}
-                {% endif %}
-
-                
-                {% endfor %}
-                <!-- 다음페이지 -->
-                {% if question_list.has_next %}
-                <li class="page_item">
-                    <a href="?page={{ question_list.next_page_number }}">다음</a>
+                    <a href="?page={{ question_list.previous_page_number }}">이전</a>
                 </li>
                 {% else %}
                 <li class="page_item disabled">
-                    <a tabindex="-1" aria-disabled="true" href="#">다음</a>
+                    <a tabindex="-1" aria-disabled="true" href="#">이전</a>
                 </li>
                 {% endif %}
-        </ul>
-        <!-- 페이징처리 끝 -->
+                <!-- 페이지리스트 -->
+                {% for page_number in question_list.paginator.page_range %}
+                {% if page_number >= question_list.number|add:-5 and page_number <= question_list.number|add:5 %} 
+                {% if page_number == question_list.number %} 
+                    <li class="page_item active" aria-current="page">
+                    <a  href="?page={{ page_number }}">{{ page_number }}</a>
+                    </li>
+                    {% else %}
+                    <li class="page_item">
+                        <a  href="?page={{ page_number }}">{{ page_number }}</a>
+                    </li>
+                    {% endif %}
+                    {% endif %}
+    
+                    
+                    {% endfor %}
+                    <!-- 다음페이지 -->
+                    {% if question_list.has_next %}
+                    <li class="page_item">
+                        <a href="?page={{ question_list.next_page_number }}">다음</a>
+                    </li>
+                    {% else %}
+                    <li class="page_item disabled">
+                        <a tabindex="-1" aria-disabled="true" href="#">다음</a>
+                    </li>
+                    {% endif %}
+            </ul>
+            <!-- 페이징처리 끝 -->
+        </div>
     </div>
-</div>
-    {% endblock %}
+        {% endblock %}
+</body>
+</html>
+

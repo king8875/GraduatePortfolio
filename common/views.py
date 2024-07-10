@@ -45,11 +45,16 @@ def signup(request):
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)  # 사용자 인증
-            login(request, user)  # 로그인
-            return redirect('pybo:index')
+            if user is not None:
+                login(request, user)  # 로그인
+                return redirect('pybo:index')
+            else:
+                return render(request, 'common/signup.html', {'form': form, 'error': 'Authentication failed.'})     
     else:
         form = UserForm()
     return render(request, 'common/signup.html', {'form': form})
+
+
 
 def landing(request):
     

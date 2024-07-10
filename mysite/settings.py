@@ -187,3 +187,25 @@ from django.conf.urls.static import static
 urlpatterns = [
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'file': {
+#             'level': 'DEBUG',
+#             'class': 'logging.FileHandler',
+#             'filename': '/path/to/debug.log',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['file'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#     },
+# }
+SESSION_COOKIE_SECURE = False  # HTTPS를 사용할 경우 True로 설정
+CSRF_COOKIE_SECURE = False  # HTTPS를 사용할 경우 True로 설정
