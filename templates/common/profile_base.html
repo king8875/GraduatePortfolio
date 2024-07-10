@@ -40,11 +40,7 @@
                 </li>
             </ul>
 
-            <script>
-                $('.content_btn').on('click', function() {
-                    $('.setting_content_con').css('display', 'block');
-                });
-            </script>
+
 
             <div class="myprofile_con">
                 <h2>My Profile</h2>
@@ -166,7 +162,7 @@
 
                 </tbody>
             </table>
-        
+
 
             <ul class="paging_con">
 
@@ -218,7 +214,15 @@
 
             $('.so').tooltip();
             $('[data-toggle="popover"]').popover();
+
+            $('.content_btn').click(function () {
+                $('.setting_content_con').toggleClass('visible');
+            });
+
         });
+
+
+
     </script>
     {% endblock %}
 </body>

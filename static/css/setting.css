@@ -74,6 +74,11 @@
 
 .setting_content_con {
   background-color: rgb(236, 236, 236);
+  display: none;
+}
+
+.visible {
+  display: block;
 }
 
 .profile_content_table {
@@ -103,8 +108,4 @@
 
 .paging_con {
   display: flex;
-}
-
-.setting_content_con {
-  display: none;
 }/*# sourceMappingURL=setting.css.map */
